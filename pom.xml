@@ -15,7 +15,13 @@
     <modules>
         <module>parent</module>
 
-        <module>flights-microserivce</module>
+        <module>cars-mcp-server</module>
+        <module>cars-microserivce</module>
+
         <module>flights-mcp-server</module>
+        <module>flights-microserivce</module>
+
+        <module>hotels-mcp-server</module>
+        <module>hotels-microserivce</module>
     </modules>
 </project>
