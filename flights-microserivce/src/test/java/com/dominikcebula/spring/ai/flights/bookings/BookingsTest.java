@@ -25,7 +25,7 @@ class BookingsTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private BookingRepository bookingRepository;
+    private BookingsRepository bookingsRepository;
 
     @Test
     void shouldCreateBookingWithSinglePassengerAndSingleFlight() {

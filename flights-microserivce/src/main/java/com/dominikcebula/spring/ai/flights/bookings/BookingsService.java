@@ -11,22 +11,22 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class BookingService {
+public class BookingsService {
 
-    private final BookingRepository bookingRepository;
+    private final BookingsRepository bookingsRepository;
     private final FlightService flightService;
 
-    public BookingService(BookingRepository bookingRepository, FlightService flightService) {
-        this.bookingRepository = bookingRepository;
+    public BookingsService(BookingsRepository bookingsRepository, FlightService flightService) {
+        this.bookingsRepository = bookingsRepository;
         this.flightService = flightService;
     }
 
     public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+        return bookingsRepository.findAll();
     }
 
     public Optional<Booking> getBookingByReference(String bookingReference) {
-        return bookingRepository.findByBookingReference(bookingReference);
+        return bookingsRepository.findByBookingReference(bookingReference);
     }
 
     public Booking createBooking(CreateBookingRequest request) {
@@ -47,11 +47,11 @@ public class BookingService {
                 now
         );
 
-        return bookingRepository.save(booking);
+        return bookingsRepository.save(booking);
     }
 
     public Optional<Booking> updateBooking(String bookingReference, UpdateBookingRequest request) {
-        return bookingRepository.findByBookingReference(bookingReference)
+        return bookingsRepository.findByBookingReference(bookingReference)
                 .filter(this::isBookingModifiable)
                 .map(existingBooking -> {
                     validateFlightsExist(request.flightNumbers());
@@ -64,16 +64,16 @@ public class BookingService {
                             newTotalPrice
                     );
 
-                    return bookingRepository.save(updatedBooking);
+                    return bookingsRepository.save(updatedBooking);
                 });
     }
 
     public Optional<Booking> cancelBooking(String bookingReference) {
-        return bookingRepository.findByBookingReference(bookingReference)
+        return bookingsRepository.findByBookingReference(bookingReference)
                 .filter(this::isBookingModifiable)
                 .map(booking -> {
                     Booking cancelledBooking = booking.withStatus(BookingStatus.CANCELLED);
-                    return bookingRepository.save(cancelledBooking);
+                    return bookingsRepository.save(cancelledBooking);
                 });
     }
 

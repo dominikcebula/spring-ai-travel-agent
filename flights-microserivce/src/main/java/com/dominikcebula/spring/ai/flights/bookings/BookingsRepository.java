@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class BookingRepository {
+public class BookingsRepository {
 
     private final Map<String, Booking> bookings = new ConcurrentHashMap<>();
 

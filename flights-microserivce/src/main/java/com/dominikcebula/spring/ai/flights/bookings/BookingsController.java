@@ -8,29 +8,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
-public class BookingController {
+public class BookingsController {
 
-    private final BookingService bookingService;
+    private final BookingsService bookingsService;
 
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public BookingsController(BookingsService bookingsService) {
+        this.bookingsService = bookingsService;
     }
 
     @GetMapping
     public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
+        return bookingsService.getAllBookings();
     }
 
     @GetMapping("/{bookingReference}")
     public ResponseEntity<Booking> getBooking(@PathVariable String bookingReference) {
-        return bookingService.getBookingByReference(bookingReference)
+        return bookingsService.getBookingByReference(bookingReference)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest request) {
-        Booking booking = bookingService.createBooking(request);
+        Booking booking = bookingsService.createBooking(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(booking);
     }
 
@@ -38,14 +38,14 @@ public class BookingController {
     public ResponseEntity<Booking> updateBooking(
             @PathVariable String bookingReference,
             @RequestBody UpdateBookingRequest request) {
-        return bookingService.updateBooking(bookingReference, request)
+        return bookingsService.updateBooking(bookingReference, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{bookingReference}")
     public ResponseEntity<Booking> cancelBooking(@PathVariable String bookingReference) {
-        return bookingService.cancelBooking(bookingReference)
+        return bookingsService.cancelBooking(bookingReference)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
