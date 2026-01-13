@@ -16,5 +16,6 @@
         <module>parent</module>
 
         <module>flights-microserivce</module>
+        <module>flights-mcp-server</module>
     </modules>
 </project>
