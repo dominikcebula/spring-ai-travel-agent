@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class FlightRepository {
+public class FlightsRepository {
 
     private final List<Flight> flights = initializeFlights();
 

@@ -1,7 +1,7 @@
 package com.dominikcebula.spring.ai.flights.bookings;
 
 import com.dominikcebula.spring.ai.flights.flights.Flight;
-import com.dominikcebula.spring.ai.flights.flights.FlightService;
+import com.dominikcebula.spring.ai.flights.flights.FlightsService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,11 +14,11 @@ import java.util.UUID;
 public class BookingsService {
 
     private final BookingsRepository bookingsRepository;
-    private final FlightService flightService;
+    private final FlightsService flightsService;
 
-    public BookingsService(BookingsRepository bookingsRepository, FlightService flightService) {
+    public BookingsService(BookingsRepository bookingsRepository, FlightsService flightsService) {
         this.bookingsRepository = bookingsRepository;
-        this.flightService = flightService;
+        this.flightsService = flightsService;
     }
 
     public List<Booking> getAllBookings() {
@@ -83,14 +83,14 @@ public class BookingsService {
 
     private void validateFlightsExist(List<String> flightNumbers) {
         for (String flightNumber : flightNumbers) {
-            flightService.getFlightByNumber(flightNumber)
+            flightsService.getFlightByNumber(flightNumber)
                     .orElseThrow(() -> new IllegalArgumentException("Flight not found: " + flightNumber));
         }
     }
 
     private BigDecimal calculateTotalPrice(List<String> flightNumbers, int passengerCount) {
         BigDecimal flightsTotal = flightNumbers.stream()
-                .map(flightService::getFlightByNumber)
+                .map(flightsService::getFlightByNumber)
                 .flatMap(Optional::stream)
                 .map(Flight::priceUsd)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

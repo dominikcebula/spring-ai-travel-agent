@@ -25,7 +25,7 @@ class FlightsTest {
     @Test
     void shouldListAllFlights() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(
@@ -45,7 +45,7 @@ class FlightsTest {
     @Test
     void shouldReturnFlightsWithIataStyleData() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(
@@ -220,7 +220,7 @@ class FlightsTest {
     @Test
     void shouldContainTransatlanticRoutes() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(
@@ -254,7 +254,7 @@ class FlightsTest {
     @Test
     void shouldContainFlightsFromMajorAirlines() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(
@@ -278,7 +278,7 @@ class FlightsTest {
     @Test
     void shouldReturnFlightsWithValidDurationAndTimes() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(
@@ -303,7 +303,7 @@ class FlightsTest {
     @Test
     void shouldReturnFlightsWithAvailableSeats() {
         // given
-        // flights are pre-loaded in FlightRepository
+        // flights are pre-loaded in FlightsRepository
 
         // when
         ResponseEntity<List<Flight>> response = restTemplate.exchange(

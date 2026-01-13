@@ -6,31 +6,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FlightService {
+public class FlightsService {
 
-    private final FlightRepository flightRepository;
+    private final FlightsRepository flightsRepository;
 
-    public FlightService(FlightRepository flightRepository) {
-        this.flightRepository = flightRepository;
+    public FlightsService(FlightsRepository flightsRepository) {
+        this.flightsRepository = flightsRepository;
     }
 
     public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+        return flightsRepository.findAll();
     }
 
     public Optional<Flight> getFlightByNumber(String flightNumber) {
-        return flightRepository.findByFlightNumber(flightNumber);
+        return flightsRepository.findByFlightNumber(flightNumber);
     }
 
     public List<Flight> getFlightsByDepartureAirport(String airportCode) {
-        return flightRepository.findByDepartureAirport(airportCode);
+        return flightsRepository.findByDepartureAirport(airportCode);
     }
 
     public List<Flight> getFlightsByArrivalAirport(String airportCode) {
-        return flightRepository.findByArrivalAirport(airportCode);
+        return flightsRepository.findByArrivalAirport(airportCode);
     }
 
     public List<Flight> getFlightsByRoute(String departureAirportCode, String arrivalAirportCode) {
-        return flightRepository.findByRoute(departureAirportCode, arrivalAirportCode);
+        return flightsRepository.findByRoute(departureAirportCode, arrivalAirportCode);
     }
 }

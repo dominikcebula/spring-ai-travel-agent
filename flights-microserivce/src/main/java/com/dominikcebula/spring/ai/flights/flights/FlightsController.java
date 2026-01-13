@@ -7,12 +7,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/flights")
-public class FlightController {
+public class FlightsController {
 
-    private final FlightService flightService;
+    private final FlightsService flightsService;
 
-    public FlightController(FlightService flightService) {
-        this.flightService = flightService;
+    public FlightsController(FlightsService flightsService) {
+        this.flightsService = flightsService;
     }
 
     @GetMapping
@@ -21,21 +21,21 @@ public class FlightController {
             @RequestParam(required = false) String arrival) {
 
         if (departure != null && arrival != null) {
-            return flightService.getFlightsByRoute(departure, arrival);
+            return flightsService.getFlightsByRoute(departure, arrival);
         }
         if (departure != null) {
-            return flightService.getFlightsByDepartureAirport(departure);
+            return flightsService.getFlightsByDepartureAirport(departure);
         }
         if (arrival != null) {
-            return flightService.getFlightsByArrivalAirport(arrival);
+            return flightsService.getFlightsByArrivalAirport(arrival);
         }
 
-        return flightService.getAllFlights();
+        return flightsService.getAllFlights();
     }
 
     @GetMapping("/{flightNumber}")
     public ResponseEntity<Flight> getFlightByNumber(@PathVariable String flightNumber) {
-        return flightService.getFlightByNumber(flightNumber)
+        return flightsService.getFlightByNumber(flightNumber)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
