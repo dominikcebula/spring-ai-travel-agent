@@ -6,17 +6,14 @@
         <groupId>com.dominikcebula.spring.ai</groupId>
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>parent/pom.xml</relativePath>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-ai-travel-agent</artifactId>
+    <artifactId>hotels</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>parent</module>
-
-        <module>cars</module>
-        <module>flights</module>
-        <module>hotels</module>
+        <module>hotels-microserivce</module>
+        <module>hotels-mcp-server</module>
     </modules>
 </project>

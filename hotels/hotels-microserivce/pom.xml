@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>com.dominikcebula.spring.ai</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>hotels</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../parent/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>flights-microserivce</artifactId>
+    <artifactId>hotels-microserivce</artifactId>
 
     <dependencies>
         <dependency>
