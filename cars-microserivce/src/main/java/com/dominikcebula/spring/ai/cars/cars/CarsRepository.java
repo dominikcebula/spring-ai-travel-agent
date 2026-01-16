@@ -1,5 +1,8 @@
 package com.dominikcebula.spring.ai.cars.cars;
 
+import com.dominikcebula.spring.ai.cars.api.cars.Car;
+import com.dominikcebula.spring.ai.cars.api.cars.CarType;
+import com.dominikcebula.spring.ai.cars.api.cars.Location;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;

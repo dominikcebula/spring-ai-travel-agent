@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.cars.bookings;
+package com.dominikcebula.spring.ai.cars.api.bookings;
 
 public enum BookingStatus {
     CONFIRMED,

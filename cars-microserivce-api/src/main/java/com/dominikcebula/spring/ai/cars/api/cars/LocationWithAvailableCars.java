@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.cars.cars;
+package com.dominikcebula.spring.ai.cars.api.cars;
 
 import java.util.List;
 

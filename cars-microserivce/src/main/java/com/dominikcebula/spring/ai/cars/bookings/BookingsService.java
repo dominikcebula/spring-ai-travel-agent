@@ -1,6 +1,10 @@
 package com.dominikcebula.spring.ai.cars.bookings;
 
-import com.dominikcebula.spring.ai.cars.cars.Car;
+import com.dominikcebula.spring.ai.cars.api.bookings.Booking;
+import com.dominikcebula.spring.ai.cars.api.bookings.BookingStatus;
+import com.dominikcebula.spring.ai.cars.api.bookings.CreateBookingRequest;
+import com.dominikcebula.spring.ai.cars.api.bookings.UpdateBookingRequest;
+import com.dominikcebula.spring.ai.cars.api.cars.Car;
 import com.dominikcebula.spring.ai.cars.cars.CarsService;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +81,7 @@ public class BookingsService {
 
                     BigDecimal newTotalPrice = calculateTotalPrice(car, request.pickUpDate(), request.returnDate());
 
-                    Booking updatedBooking = existingBooking.withUpdatedDetails(
+                    Booking updatedBooking = new BookingFactory(existingBooking).withUpdatedDetails(
                             request.drivers(),
                             request.pickUpDate(),
                             request.returnDate(),
@@ -92,7 +96,7 @@ public class BookingsService {
         return bookingsRepository.findByBookingReference(bookingReference)
                 .filter(this::isBookingModifiable)
                 .map(booking -> {
-                    Booking cancelledBooking = booking.withStatus(BookingStatus.CANCELLED);
+                    Booking cancelledBooking = new BookingFactory(booking).withStatus(BookingStatus.CANCELLED);
                     carsService.updateCarAvailability(booking.carId(), true);
                     return bookingsRepository.save(cancelledBooking);
                 });

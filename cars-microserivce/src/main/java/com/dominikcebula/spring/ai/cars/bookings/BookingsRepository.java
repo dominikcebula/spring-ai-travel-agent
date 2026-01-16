@@ -1,5 +1,6 @@
 package com.dominikcebula.spring.ai.cars.bookings;
 
+import com.dominikcebula.spring.ai.cars.api.bookings.Booking;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

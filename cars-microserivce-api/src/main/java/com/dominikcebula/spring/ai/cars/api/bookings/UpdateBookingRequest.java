@@ -1,11 +1,9 @@
-package com.dominikcebula.spring.ai.cars.bookings;
+package com.dominikcebula.spring.ai.cars.api.bookings;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateBookingRequest(
-        String locationId,
-        String carId,
+public record UpdateBookingRequest(
         List<Driver> drivers,
         LocalDate pickUpDate,
         LocalDate returnDate

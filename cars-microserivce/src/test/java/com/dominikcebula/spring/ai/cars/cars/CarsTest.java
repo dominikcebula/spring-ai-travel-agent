@@ -1,5 +1,9 @@
 package com.dominikcebula.spring.ai.cars.cars;
 
+import com.dominikcebula.spring.ai.cars.api.cars.Car;
+import com.dominikcebula.spring.ai.cars.api.cars.CarType;
+import com.dominikcebula.spring.ai.cars.api.cars.Location;
+import com.dominikcebula.spring.ai.cars.api.cars.LocationWithAvailableCars;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

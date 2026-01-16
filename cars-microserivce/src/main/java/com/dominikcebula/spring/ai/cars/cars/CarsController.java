@@ -1,13 +1,16 @@
 package com.dominikcebula.spring.ai.cars.cars;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.dominikcebula.spring.ai.cars.api.cars.Car;
+import com.dominikcebula.spring.ai.cars.api.cars.CarsApi;
+import com.dominikcebula.spring.ai.cars.api.cars.Location;
+import com.dominikcebula.spring.ai.cars.api.cars.LocationWithAvailableCars;
+import com.dominikcebula.spring.ai.cars.exception.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cars")
-public class CarsController {
+public class CarsController implements CarsApi {
 
     private final CarsService carsService;
 
@@ -15,44 +18,38 @@ public class CarsController {
         this.carsService = carsService;
     }
 
-    @GetMapping("/locations")
+    @Override
     public List<Location> getAllLocations() {
         return carsService.getAllLocations();
     }
 
-    @GetMapping("/locations/{locationId}")
-    public ResponseEntity<Location> getLocationById(@PathVariable String locationId) {
+    @Override
+    public Location getLocationById(String locationId) {
         return carsService.getLocationById(locationId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found: " + locationId));
     }
 
-    @GetMapping("/locations/{locationId}/cars")
-    public ResponseEntity<List<Car>> getCarsByLocationId(@PathVariable String locationId) {
+    @Override
+    public List<Car> getCarsByLocationId(String locationId) {
         if (carsService.getLocationById(locationId).isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Location not found: " + locationId);
         }
-
-        return ResponseEntity.ok(carsService.getCarsByLocationId(locationId));
+        return carsService.getCarsByLocationId(locationId);
     }
 
-    @GetMapping
+    @Override
     public List<Car> getAllCars() {
         return carsService.getAllCars();
     }
 
-    @GetMapping("/{carId}")
-    public ResponseEntity<Car> getCarById(@PathVariable String carId) {
+    @Override
+    public Car getCarById(String carId) {
         return carsService.getCarById(carId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Car not found: " + carId));
     }
 
-    @GetMapping("/search/available")
-    public List<LocationWithAvailableCars> searchForAvailableCars(
-            @RequestParam(required = false) String airportCode,
-            @RequestParam(required = false) String city) {
-
+    @Override
+    public List<LocationWithAvailableCars> searchForAvailableCars(String airportCode, String city) {
         return carsService.searchForAvailableCars(airportCode, city);
     }
 }

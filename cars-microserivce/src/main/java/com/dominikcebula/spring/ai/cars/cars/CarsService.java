@@ -1,5 +1,8 @@
 package com.dominikcebula.spring.ai.cars.cars;
 
+import com.dominikcebula.spring.ai.cars.api.cars.Car;
+import com.dominikcebula.spring.ai.cars.api.cars.Location;
+import com.dominikcebula.spring.ai.cars.api.cars.LocationWithAvailableCars;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +40,7 @@ public class CarsService {
     public Car updateCarAvailability(String carId, boolean available) {
         Car car = carsRepository.findCarById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Car not found: " + carId));
-        Car updatedCar = car.withAvailability(available);
+        Car updatedCar = new CarFactory(car).withAvailability(available);
         return carsRepository.saveCar(updatedCar);
     }
 
