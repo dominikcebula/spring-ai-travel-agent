@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.flights;
+package com.dominikcebula.spring.ai.cars;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
