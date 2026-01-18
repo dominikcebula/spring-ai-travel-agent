@@ -1,17 +1,18 @@
 package com.dominikcebula.spring.ai.flights.bookings;
 
 import com.dominikcebula.spring.ai.flights.api.bookings.Booking;
+import com.dominikcebula.spring.ai.flights.api.bookings.BookingsApi;
 import com.dominikcebula.spring.ai.flights.api.bookings.CreateBookingRequest;
 import com.dominikcebula.spring.ai.flights.api.bookings.UpdateBookingRequest;
+import com.dominikcebula.spring.ai.flights.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/bookings")
-public class BookingsController {
+public class BookingsController implements BookingsApi {
 
     private final BookingsService bookingsService;
 
@@ -19,37 +20,32 @@ public class BookingsController {
         this.bookingsService = bookingsService;
     }
 
-    @GetMapping
+    @Override
     public List<Booking> getAllBookings() {
         return bookingsService.getAllBookings();
     }
 
-    @GetMapping("/{bookingReference}")
-    public ResponseEntity<Booking> getBooking(@PathVariable String bookingReference) {
+    @Override
+    public Booking getBooking(String bookingReference) {
         return bookingsService.getBookingByReference(bookingReference)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
     }
 
-    @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest request) {
-        Booking booking = bookingsService.createBooking(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+    @Override
+    @ResponseStatus(HttpStatus.CREATED)
+    public Booking createBooking(CreateBookingRequest request) {
+        return bookingsService.createBooking(request);
     }
 
-    @PutMapping("/{bookingReference}")
-    public ResponseEntity<Booking> updateBooking(
-            @PathVariable String bookingReference,
-            @RequestBody UpdateBookingRequest request) {
+    @Override
+    public Booking updateBooking(String bookingReference, UpdateBookingRequest request) {
         return bookingsService.updateBooking(bookingReference, request)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
     }
 
-    @DeleteMapping("/{bookingReference}")
-    public ResponseEntity<Booking> cancelBooking(@PathVariable String bookingReference) {
+    @Override
+    public Booking cancelBooking(String bookingReference) {
         return bookingsService.cancelBooking(bookingReference)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
     }
 }

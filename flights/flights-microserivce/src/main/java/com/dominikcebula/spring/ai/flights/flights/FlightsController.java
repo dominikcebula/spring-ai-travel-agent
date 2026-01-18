@@ -1,14 +1,14 @@
 package com.dominikcebula.spring.ai.flights.flights;
 
 import com.dominikcebula.spring.ai.flights.api.flights.Flight;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.dominikcebula.spring.ai.flights.api.flights.FlightsApi;
+import com.dominikcebula.spring.ai.flights.exception.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/flights")
-public class FlightsController {
+public class FlightsController implements FlightsApi {
 
     private final FlightsService flightsService;
 
@@ -16,11 +16,8 @@ public class FlightsController {
         this.flightsService = flightsService;
     }
 
-    @GetMapping
-    public List<Flight> getAllFlights(
-            @RequestParam(required = false) String departure,
-            @RequestParam(required = false) String arrival) {
-
+    @Override
+    public List<Flight> getAllFlights(String departure, String arrival) {
         if (departure != null && arrival != null) {
             return flightsService.getFlightsByRoute(departure, arrival);
         }
@@ -34,10 +31,9 @@ public class FlightsController {
         return flightsService.getAllFlights();
     }
 
-    @GetMapping("/{flightNumber}")
-    public ResponseEntity<Flight> getFlightByNumber(@PathVariable String flightNumber) {
+    @Override
+    public Flight getFlightByNumber(String flightNumber) {
         return flightsService.getFlightByNumber(flightNumber)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Flight not found: " + flightNumber));
     }
 }
