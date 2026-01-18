@@ -1,6 +1,10 @@
 package com.dominikcebula.spring.ai.flights.bookings;
 
-import com.dominikcebula.spring.ai.flights.flights.Flight;
+import com.dominikcebula.spring.ai.flights.api.bookings.Booking;
+import com.dominikcebula.spring.ai.flights.api.bookings.BookingStatus;
+import com.dominikcebula.spring.ai.flights.api.bookings.CreateBookingRequest;
+import com.dominikcebula.spring.ai.flights.api.bookings.UpdateBookingRequest;
+import com.dominikcebula.spring.ai.flights.api.flights.Flight;
 import com.dominikcebula.spring.ai.flights.flights.FlightsService;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +61,7 @@ public class BookingsService {
                     validateFlightsExist(request.flightNumbers());
                     BigDecimal newTotalPrice = calculateTotalPrice(request.flightNumbers(), request.passengers().size());
 
-                    Booking updatedBooking = existingBooking.withUpdatedDetails(
+                    Booking updatedBooking = new BookingFactory(existingBooking).withUpdatedDetails(
                             request.passengers(),
                             request.flightNumbers(),
                             request.travelDate(),
@@ -72,7 +76,7 @@ public class BookingsService {
         return bookingsRepository.findByBookingReference(bookingReference)
                 .filter(this::isBookingModifiable)
                 .map(booking -> {
-                    Booking cancelledBooking = booking.withStatus(BookingStatus.CANCELLED);
+                    Booking cancelledBooking = new BookingFactory(booking).withStatus(BookingStatus.CANCELLED);
                     return bookingsRepository.save(cancelledBooking);
                 });
     }

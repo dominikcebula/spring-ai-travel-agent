@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.flights.flights;
+package com.dominikcebula.spring.ai.flights.api.flights;
 
 import java.math.BigDecimal;
 import java.time.Duration;

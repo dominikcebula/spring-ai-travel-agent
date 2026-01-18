@@ -1,5 +1,8 @@
 package com.dominikcebula.spring.ai.flights.bookings;
 
+import com.dominikcebula.spring.ai.flights.api.bookings.Booking;
+import com.dominikcebula.spring.ai.flights.api.bookings.CreateBookingRequest;
+import com.dominikcebula.spring.ai.flights.api.bookings.UpdateBookingRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

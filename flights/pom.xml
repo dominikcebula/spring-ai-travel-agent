@@ -13,7 +13,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>flights-microserivce-api</module>
         <module>flights-microserivce</module>
+        <module>flights-microserivce-client</module>
         <module>flights-mcp-server</module>
     </modules>
 </project>

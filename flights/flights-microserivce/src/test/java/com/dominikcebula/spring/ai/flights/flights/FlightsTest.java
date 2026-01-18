@@ -1,5 +1,6 @@
 package com.dominikcebula.spring.ai.flights.flights;
 
+import com.dominikcebula.spring.ai.flights.api.flights.Flight;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

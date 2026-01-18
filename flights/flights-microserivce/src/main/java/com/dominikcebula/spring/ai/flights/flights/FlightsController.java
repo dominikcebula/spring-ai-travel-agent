@@ -1,5 +1,6 @@
 package com.dominikcebula.spring.ai.flights.flights;
 
+import com.dominikcebula.spring.ai.flights.api.flights.Flight;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
