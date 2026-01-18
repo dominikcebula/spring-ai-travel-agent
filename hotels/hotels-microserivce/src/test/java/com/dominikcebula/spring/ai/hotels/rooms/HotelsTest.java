@@ -1,5 +1,9 @@
 package com.dominikcebula.spring.ai.hotels.rooms;
 
+import com.dominikcebula.spring.ai.hotels.api.rooms.Hotel;
+import com.dominikcebula.spring.ai.hotels.api.rooms.HotelWithAvailableRooms;
+import com.dominikcebula.spring.ai.hotels.api.rooms.Room;
+import com.dominikcebula.spring.ai.hotels.api.rooms.RoomType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

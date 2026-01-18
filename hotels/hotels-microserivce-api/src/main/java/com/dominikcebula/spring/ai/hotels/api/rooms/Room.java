@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.hotels.rooms;
+package com.dominikcebula.spring.ai.hotels.api.rooms;
 
 import java.math.BigDecimal;
 
@@ -11,7 +11,4 @@ public record Room(
         int capacity,
         boolean available
 ) {
-    public Room withAvailability(boolean newAvailable) {
-        return new Room(roomId, hotelId, roomType, description, pricePerNight, capacity, newAvailable);
-    }
 }

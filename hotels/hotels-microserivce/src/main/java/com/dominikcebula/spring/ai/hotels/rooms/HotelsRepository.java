@@ -1,5 +1,8 @@
 package com.dominikcebula.spring.ai.hotels.rooms;
 
+import com.dominikcebula.spring.ai.hotels.api.rooms.Hotel;
+import com.dominikcebula.spring.ai.hotels.api.rooms.Room;
+import com.dominikcebula.spring.ai.hotels.api.rooms.RoomType;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;

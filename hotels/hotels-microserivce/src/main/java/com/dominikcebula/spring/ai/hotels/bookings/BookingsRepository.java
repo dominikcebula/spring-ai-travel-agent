@@ -1,5 +1,6 @@
 package com.dominikcebula.spring.ai.hotels.bookings;
 
+import com.dominikcebula.spring.ai.hotels.api.bookings.Booking;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

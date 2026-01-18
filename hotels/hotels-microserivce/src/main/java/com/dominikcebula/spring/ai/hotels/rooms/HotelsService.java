@@ -1,5 +1,8 @@
 package com.dominikcebula.spring.ai.hotels.rooms;
 
+import com.dominikcebula.spring.ai.hotels.api.rooms.Hotel;
+import com.dominikcebula.spring.ai.hotels.api.rooms.HotelWithAvailableRooms;
+import com.dominikcebula.spring.ai.hotels.api.rooms.Room;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +36,7 @@ public class HotelsService {
     public Room updateRoomAvailability(String roomId, boolean available) {
         Room room = hotelsRepository.findRoomByRoomId(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Room not found: " + roomId));
-        Room updatedRoom = room.withAvailability(available);
+        Room updatedRoom = new RoomFactory(room).withAvailability(available);
         return hotelsRepository.saveRoom(updatedRoom);
     }
 

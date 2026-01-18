@@ -1,4 +1,4 @@
-package com.dominikcebula.spring.ai.hotels.rooms;
+package com.dominikcebula.spring.ai.hotels.api.rooms;
 
 import java.util.List;
 

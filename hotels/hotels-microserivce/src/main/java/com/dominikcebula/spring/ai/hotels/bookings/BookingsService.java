@@ -1,7 +1,11 @@
 package com.dominikcebula.spring.ai.hotels.bookings;
 
+import com.dominikcebula.spring.ai.hotels.api.bookings.Booking;
+import com.dominikcebula.spring.ai.hotels.api.bookings.BookingStatus;
+import com.dominikcebula.spring.ai.hotels.api.bookings.CreateBookingRequest;
+import com.dominikcebula.spring.ai.hotels.api.bookings.UpdateBookingRequest;
+import com.dominikcebula.spring.ai.hotels.api.rooms.Room;
 import com.dominikcebula.spring.ai.hotels.rooms.HotelsService;
-import com.dominikcebula.spring.ai.hotels.rooms.Room;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -77,7 +81,7 @@ public class BookingsService {
 
                     BigDecimal newTotalPrice = calculateTotalPrice(room, request.checkInDate(), request.checkOutDate());
 
-                    Booking updatedBooking = existingBooking.withUpdatedDetails(
+                    Booking updatedBooking = new BookingFactory(existingBooking).withUpdatedDetails(
                             request.guests(),
                             request.checkInDate(),
                             request.checkOutDate(),
@@ -92,7 +96,7 @@ public class BookingsService {
         return bookingsRepository.findByBookingReference(bookingReference)
                 .filter(this::isBookingModifiable)
                 .map(booking -> {
-                    Booking cancelledBooking = booking.withStatus(BookingStatus.CANCELLED);
+                    Booking cancelledBooking = new BookingFactory(booking).withStatus(BookingStatus.CANCELLED);
                     hotelsService.updateRoomAvailability(booking.roomId(), true);
                     return bookingsRepository.save(cancelledBooking);
                 });
