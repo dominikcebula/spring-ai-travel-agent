@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="FlightsMicroserviceApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <module name="flights-microserivce"/>
+        <option name="SPRING_BOOT_MAIN_CLASS"
+                value="com.dominikcebula.spring.ai.flights.FlightsMicroserviceApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.dominikcebula.spring.ai.flights.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

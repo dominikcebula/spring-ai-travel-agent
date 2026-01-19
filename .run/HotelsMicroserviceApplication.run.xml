@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="HotelsMicroserviceApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <module name="hotels-microserivce"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.dominikcebula.spring.ai.hotels.HotelsMicroserviceApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.dominikcebula.spring.ai.hotels.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

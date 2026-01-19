@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Run All" type="CompoundRunConfigurationType">
+        <toRun name="CarsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="CarsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="FlightsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="FlightsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="HotelsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="HotelsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
+        <method v="2"/>
+    </configuration>
+</component>
