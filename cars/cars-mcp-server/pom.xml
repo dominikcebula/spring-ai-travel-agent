@@ -17,5 +17,11 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.dominikcebula.spring.ai</groupId>
+            <artifactId>cars-microserivce-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
