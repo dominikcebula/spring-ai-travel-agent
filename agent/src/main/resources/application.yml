@@ -1,0 +1,21 @@
+spring:
+  ai:
+    bedrock:
+      aws:
+        region: eu-central-1
+      converse:
+        chat:
+          options:
+            model: eu.amazon.nova-micro-v1:0
+    mcp:
+      client:
+        streamable-http:
+          connections:
+            server1:
+              url: ${CARS_MCP_URL:http://localhost:8011}
+            server2:
+              url: ${FLIGHTS_MCP_URL:http://localhost:8021}
+            server3:
+              url: ${HOTELS_MCP_URL:http://localhost:8031}
+server:
+  port: 8050

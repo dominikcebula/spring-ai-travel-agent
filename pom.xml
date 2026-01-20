@@ -18,5 +18,7 @@
         <module>cars</module>
         <module>flights</module>
         <module>hotels</module>
+
+        <module>agent</module>
     </modules>
 </project>

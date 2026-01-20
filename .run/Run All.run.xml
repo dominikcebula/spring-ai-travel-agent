@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="Run All" type="CompoundRunConfigurationType">
+        <toRun name="AgentApplication" type="SpringBootApplicationConfigurationType"/>
         <toRun name="CarsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
         <toRun name="CarsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
         <toRun name="FlightsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
