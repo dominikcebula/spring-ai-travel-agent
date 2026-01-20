@@ -19,28 +19,28 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Get all car rental bookings, optionally filtered by location")
-    public List<Booking> getAllBookings(
+    public List<Booking> getAllCarRentalBookings(
             @McpToolParam(required = false, description = "ID of car rental location to filter bookings by")
             String locationId) {
         return bookingsApi.getAllBookings(locationId);
     }
 
     @McpTool(description = "Get a car rental booking by its reference number")
-    public Booking getBooking(
+    public Booking getCarRentalBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.getBooking(bookingReference);
     }
 
     @McpTool(description = "Create a new car rental booking")
-    public Booking createBooking(
+    public Booking createCarRentalBooking(
             @McpToolParam(description = "Booking request containing locationId, carId, drivers list (each with firstName, lastName, dateOfBirth, driverLicenseNumber, email, phoneNumber), pickUpDate, and returnDate")
             CreateBookingRequest request) {
         return bookingsApi.createBooking(request);
     }
 
     @McpTool(description = "Update an existing car rental booking")
-    public Booking updateBooking(
+    public Booking updateCarRentalBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference,
             @McpToolParam(description = "Update request containing drivers list (each with firstName, lastName, dateOfBirth, driverLicenseNumber, email, phoneNumber), pickUpDate, and returnDate")
@@ -49,7 +49,7 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Cancel an existing car rental booking")
-    public Booking cancelBooking(
+    public Booking cancelCarRentalBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.cancelBooking(bookingReference);

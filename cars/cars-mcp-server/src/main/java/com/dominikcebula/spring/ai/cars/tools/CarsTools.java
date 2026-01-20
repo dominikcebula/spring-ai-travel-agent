@@ -19,36 +19,36 @@ public class CarsTools {
     }
 
     @McpTool(description = "Get all locations where cars for rental are available")
-    public List<Location> getAllLocations() {
+    public List<Location> getAllCarRentalLocations() {
         return carsApi.getAllLocations();
     }
 
     @McpTool(description = "Get location of car rental service by its ID")
-    public Location getLocationById(
+    public Location getCarRentalLocationById(
             @McpToolParam(description = "ID of car rental service location")
             String locationId) {
         return carsApi.getLocationById(locationId);
     }
 
     @McpTool(description = "Get all cars available for rental at given location")
-    public List<Car> getCarsByLocationId(
+    public List<Car> getCarsByCarRentalLocationId(
             @McpToolParam(description = "ID of car rental service location")
             String locationId) {
         return carsApi.getCarsByLocationId(locationId);
     }
 
     @McpTool(description = "Get all cars available for rental in all locations")
-    public List<Car> getAllCars() {
+    public List<Car> getAllCarsAvailableForRent() {
         return carsApi.getAllCars();
     }
 
     @McpTool(description = "Get car by its ID")
-    public Car getCarById(@McpToolParam(description = "Car ID") String carId) {
+    public Car getCarAvailableForRentById(@McpToolParam(description = "Car ID") String carId) {
         return carsApi.getCarById(carId);
     }
 
     @McpTool(description = "Search for available cars based on airport code and/or city")
-    public List<LocationWithAvailableCars> searchForAvailableCars(
+    public List<LocationWithAvailableCars> searchForAvailableCarsForRent(
             @McpToolParam(required = false, description = "airport code") String airportCode,
             @McpToolParam(required = false, description = "city name") String city) {
         return carsApi.searchForAvailableCars(airportCode, city);

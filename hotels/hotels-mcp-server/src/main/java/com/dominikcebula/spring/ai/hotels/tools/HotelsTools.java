@@ -19,7 +19,7 @@ public class HotelsTools {
     }
 
     @McpTool(description = "Get all available hotels")
-    public List<Hotel> getAllHotels() {
+    public List<Hotel> getAllAvailableHotels() {
         return hotelsApi.getAllHotels();
     }
 

@@ -19,26 +19,26 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Get all flight bookings")
-    public List<Booking> getAllBookings() {
+    public List<Booking> getAllFlightsBookings() {
         return bookingsApi.getAllBookings();
     }
 
     @McpTool(description = "Get a flight booking by its reference number")
-    public Booking getBooking(
+    public Booking getFlightBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.getBooking(bookingReference);
     }
 
     @McpTool(description = "Create a new flight booking")
-    public Booking createBooking(
+    public Booking createFlightBooking(
             @McpToolParam(description = "Booking request containing passengers list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), flightNumbers list, and travelDate")
             CreateBookingRequest request) {
         return bookingsApi.createBooking(request);
     }
 
     @McpTool(description = "Update an existing flight booking")
-    public Booking updateBooking(
+    public Booking updateFlightBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference,
             @McpToolParam(description = "Update request containing passengers list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), flightNumbers list, and travelDate")
@@ -47,7 +47,7 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Cancel an existing flight booking")
-    public Booking cancelBooking(
+    public Booking cancelFlightBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.cancelBooking(bookingReference);

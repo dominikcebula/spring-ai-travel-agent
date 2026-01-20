@@ -19,28 +19,28 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Get all hotel bookings, optionally filtered by hotel")
-    public List<Booking> getAllBookings(
+    public List<Booking> getAllHotelsBookingsByHotelId(
             @McpToolParam(required = false, description = "Hotel ID to filter bookings by")
             String hotelId) {
         return bookingsApi.getAllBookings(hotelId);
     }
 
     @McpTool(description = "Get a hotel booking by its reference number")
-    public Booking getBooking(
+    public Booking getHotelBookingsByBookingReference(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.getBooking(bookingReference);
     }
 
     @McpTool(description = "Create a new hotel booking")
-    public Booking createBooking(
+    public Booking createHotelBooking(
             @McpToolParam(description = "Booking request containing hotelId, roomId, guests list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), checkInDate, and checkOutDate")
             CreateBookingRequest request) {
         return bookingsApi.createBooking(request);
     }
 
     @McpTool(description = "Update an existing hotel booking")
-    public Booking updateBooking(
+    public Booking updateHotelBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference,
             @McpToolParam(description = "Update request containing guests list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), checkInDate, and checkOutDate")
@@ -49,7 +49,7 @@ public class BookingsTools {
     }
 
     @McpTool(description = "Cancel an existing hotel booking")
-    public Booking cancelBooking(
+    public Booking cancelHotelBooking(
             @McpToolParam(description = "Booking reference number")
             String bookingReference) {
         return bookingsApi.cancelBooking(bookingReference);

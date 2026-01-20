@@ -17,7 +17,7 @@ public class FlightsTools {
     }
 
     @McpTool(description = "Get all available flights, optionally filtered by departure and/or arrival airport")
-    public List<Flight> getAllFlights(
+    public List<Flight> getAllAvailableFlights(
             @McpToolParam(required = false, description = "Departure airport code")
             String departure,
             @McpToolParam(required = false, description = "Arrival airport code")
