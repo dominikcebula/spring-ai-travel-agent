@@ -66,6 +66,74 @@ orchestrates these tools using AWS Bedrock (Amazon Nova) to provide a seamless b
 | hotels-microservice  | 8030 | Hotels REST API     |
 | hotels-mcp-server    | 8031 | Hotel tools for AI  |
 
+### Data Storage
+
+For simplicity, **all data is kept in-memory only** — no real database is used. Each microservice maintains its own
+in-memory data store with pre-populated sample data (flights, hotels, car rental locations, etc.). Data is reset when
+services restart.
+
+### MCP Server to Microservice Communication
+
+Each MCP Server connects to its corresponding Microservice via REST API using Spring's **declarative HTTP Service
+Client** (`HttpServiceProxyFactory`). The API contracts are defined as interfaces with `@HttpExchange` annotations in
+the `*-microserivce-api` modules, which are shared between the microservice (server) and the client.
+
+```
+┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+│   MCP Server    │─────▶│  Client Module  │─────▶│  Microservice   │
+│ (exposes tools) │      │ (HTTP Service)  │      │   (REST API)    │
+└─────────────────┘      └─────────────────┘      └─────────────────┘
+        │                        │                        │
+   @McpTool             HttpServiceProxyFactory     @RestController
+   annotations          + RestClientAdapter         + @HttpExchange
+```
+
+## 🔧 MCP Tools
+
+The AI agent has access to the following tools exposed by MCP servers:
+
+### ✈️ Flights MCP Tools
+
+| Tool                     | Description                                                                        |
+|--------------------------|------------------------------------------------------------------------------------|
+| `getAllAvailableFlights` | Get all available flights, optionally filtered by departure and/or arrival airport |
+| `getFlightByNumber`      | Get a flight by its flight number                                                  |
+| `getAllFlightsBookings`  | Get all flight bookings                                                            |
+| `getFlightBooking`       | Get a flight booking by its reference number                                       |
+| `createFlightBooking`    | Create a new flight booking with passengers and flight numbers                     |
+| `updateFlightBooking`    | Update an existing flight booking                                                  |
+| `cancelFlightBooking`    | Cancel an existing flight booking                                                  |
+
+### 🏨 Hotels MCP Tools
+
+| Tool                                 | Description                                                  |
+|--------------------------------------|--------------------------------------------------------------|
+| `getAllAvailableHotels`              | Get all available hotels                                     |
+| `getHotelById`                       | Get a hotel by its ID                                        |
+| `getRoomsByHotelId`                  | Get all rooms available at a specific hotel                  |
+| `searchForAvailableRooms`            | Search for available hotel rooms by airport code and/or city |
+| `getAllHotelsBookingsByHotelId`      | Get all hotel bookings, optionally filtered by hotel         |
+| `getHotelBookingsByBookingReference` | Get a hotel booking by its reference number                  |
+| `createHotelBooking`                 | Create a new hotel booking with guests and room details      |
+| `updateHotelBooking`                 | Update an existing hotel booking                             |
+| `cancelHotelBooking`                 | Cancel an existing hotel booking                             |
+
+### 🚗 Cars MCP Tools
+
+| Tool                            | Description                                                  |
+|---------------------------------|--------------------------------------------------------------|
+| `getAllCarRentalLocations`      | Get all locations where cars for rental are available        |
+| `getCarRentalLocationById`      | Get location of car rental service by its ID                 |
+| `getCarsByCarRentalLocationId`  | Get all cars available for rental at a given location        |
+| `getAllCarsAvailableForRent`    | Get all cars available for rental in all locations           |
+| `getCarAvailableForRentById`    | Get car by its ID                                            |
+| `searchForAvailableCarsForRent` | Search for available cars by airport code and/or city        |
+| `getAllCarRentalBookings`       | Get all car rental bookings, optionally filtered by location |
+| `getCarRentalBooking`           | Get a car rental booking by its reference number             |
+| `createCarRentalBooking`        | Create a new car rental booking with drivers and dates       |
+| `updateCarRentalBooking`        | Update an existing car rental booking                        |
+| `cancelCarRentalBooking`        | Cancel an existing car rental booking                        |
+
 ## 🚀 Usage
 
 ### Prerequisites
