@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="#3b82f6"/>
+    <g fill="white">
+        <!-- Airplane -->
+        <path d="M70 35L55 45L40 38L38 40L50 50L35 55L30 52L28 54L35 62L65 52L70 35Z"/>
+        <!-- Globe lines -->
+        <ellipse cx="50" cy="50" rx="30" ry="30" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+        <ellipse cx="50" cy="50" rx="15" ry="30" fill="none" stroke="white" stroke-width="1.5" opacity="0.3"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke="white" stroke-width="1.5" opacity="0.3"/>
+    </g>
+</svg>
