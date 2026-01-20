@@ -4,6 +4,8 @@
 
 This repository contains Spring AI Travel Agent Sample.
 
+![agent-chat-ui.png](docs/agent-chat-ui.png)
+
 ## 🛠️ Tech Stack
 
 TBD
