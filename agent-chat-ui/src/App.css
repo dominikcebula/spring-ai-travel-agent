@@ -125,6 +125,10 @@
     position: relative;
 }
 
+.rcb-chat-window {
+    width: 100% !important;
+}
+
 .chat-container > div {
     height: 100% !important;
     width: 100% !important;
