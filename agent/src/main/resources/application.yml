@@ -11,11 +11,11 @@ spring:
       client:
         streamable-http:
           connections:
-            server1:
+            cars-mcp-server:
               url: ${CARS_MCP_URL:http://localhost:8011}
-            server2:
+            flights-mcp-server:
               url: ${FLIGHTS_MCP_URL:http://localhost:8021}
-            server3:
+            hotels-mcp-server:
               url: ${HOTELS_MCP_URL:http://localhost:8031}
 server:
   port: 8050
