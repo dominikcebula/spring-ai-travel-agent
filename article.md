@@ -456,7 +456,7 @@ TBD
 - Agent correctness evaluation
 - Short-term memory (STM) and long-term memory (LTM) support, including user preference extraction and storage
 - Security hardening
-- Flights / Hotels / Rental Cars Microservices should be persisted in a database.
+- Flights / Hotels / Rental Cars data should be persisted in a database.
 - Validation of user input should be performed on the Microservices side.
 
 ## Summary
