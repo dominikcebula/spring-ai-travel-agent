@@ -1,5 +1,7 @@
 # 📦 Spring AI Travel Agent
 
+![logo.png](docs/logo.png)
+
 ## 📝 Overview
 
 This repository contains a full-stack AI-powered travel booking assistant built with **Spring AI** and the **Model
