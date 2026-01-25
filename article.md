@@ -34,6 +34,10 @@ Each domain consists of MCP Server, MCP Tools, API, and Microservice that implem
 Under each domain it's possible to execute search operations as well as manage created bookings, using REST API or using
 MCP protocol, which is a solution well suited for AI agents.
 
+## Note on the Solution
+
+TBD - describe why separate deployment units and pros and cons
+
 ## Tech Stack
 
 Below is a list of technologies used in the solution.
@@ -235,51 +239,205 @@ Full source code is available on GitHub: https://github.com/dominikcebula/spring
 
 ### MCP Servers and MCP Tools
 
-MCP Servers are hosting MCP Tools for each domain giving the agent the ability to access and manager booking data.
+MCP Servers are hosting MCP Tools for each domain allowing the agent to access and manager booking data.
 
-Here are some examples of MCP Tools created:
+Each MCP Server is sort of like a wrapper around backing Microservice,
+which is responsible for executing business logic for search and bookings operations for each domain.
 
-#### Flights MCP Tools
+Here is an example MCP Tools for Flights Search:
 
-| Tool                     | Description                                                                        |
-|--------------------------|------------------------------------------------------------------------------------|
-| `getAllAvailableFlights` | Get all available flights, optionally filtered by departure and/or arrival airport |
-| `getFlightByNumber`      | Get a flight by its flight number                                                  |
-| `getAllFlightsBookings`  | Get all flight bookings                                                            |
-| `getFlightBooking`       | Get a flight booking by its reference number                                       |
-| `createFlightBooking`    | Create a new flight booking with passengers and flight numbers                     |
-| `updateFlightBooking`    | Update an existing flight booking                                                  |
-| `cancelFlightBooking`    | Cancel an existing flight booking                                                  |
+```java
 
-#### Hotels MCP Tools
+@Component
+public class FlightsTools {
+    private final FlightsApi flightsApi;
 
-| Tool                                 | Description                                                  |
-|--------------------------------------|--------------------------------------------------------------|
-| `getAllAvailableHotels`              | Get all available hotels                                     |
-| `getHotelById`                       | Get a hotel by its ID                                        |
-| `getRoomsByHotelId`                  | Get all rooms available at a specific hotel                  |
-| `searchForAvailableRooms`            | Search for available hotel rooms by airport code and/or city |
-| `getAllHotelsBookingsByHotelId`      | Get all hotel bookings, optionally filtered by hotel         |
-| `getHotelBookingsByBookingReference` | Get a hotel booking by its reference number                  |
-| `createHotelBooking`                 | Create a new hotel booking with guests and room details      |
-| `updateHotelBooking`                 | Update an existing hotel booking                             |
-| `cancelHotelBooking`                 | Cancel an existing hotel booking                             |
+    public FlightsTools(FlightsApi flightsApi) {
+        this.flightsApi = flightsApi;
+    }
 
-#### Cars MCP Tools
+    @McpTool(description = "Get all available flights, optionally filtered by departure and/or arrival airport")
+    public List<Flight> getAllAvailableFlights(
+            @McpToolParam(required = false, description = "Departure airport code")
+            String departure,
+            @McpToolParam(required = false, description = "Arrival airport code")
+            String arrival) {
+        return flightsApi.getAllFlights(departure, arrival);
+    }
 
-| Tool                            | Description                                                  |
-|---------------------------------|--------------------------------------------------------------|
-| `getAllCarRentalLocations`      | Get all locations where cars for rental are available        |
-| `getCarRentalLocationById`      | Get location of car rental service by its ID                 |
-| `getCarsByCarRentalLocationId`  | Get all cars available for rental at a given location        |
-| `getAllCarsAvailableForRent`    | Get all cars available for rental in all locations           |
-| `getCarAvailableForRentById`    | Get car by its ID                                            |
-| `searchForAvailableCarsForRent` | Search for available cars by airport code and/or city        |
-| `getAllCarRentalBookings`       | Get all car rental bookings, optionally filtered by location |
-| `getCarRentalBooking`           | Get a car rental booking by its reference number             |
-| `createCarRentalBooking`        | Create a new car rental booking with drivers and dates       |
-| `updateCarRentalBooking`        | Update an existing car rental booking                        |
-| `cancelCarRentalBooking`        | Cancel an existing car rental booking                        |
+    @McpTool(description = "Get a flight by its flight number")
+    public Flight getFlightByNumber(
+            @McpToolParam(description = "Flight number")
+            String flightNumber) {
+        return flightsApi.getFlightByNumber(flightNumber);
+    }
+}
+```
+
+and here is an example MCP Tools for Flights Booking:
+
+```java
+
+@Component
+public class BookingsTools {
+    private final BookingsApi bookingsApi;
+
+    public BookingsTools(BookingsApi bookingsApi) {
+        this.bookingsApi = bookingsApi;
+    }
+
+    @McpTool(description = "Get all flight bookings")
+    public List<Booking> getAllFlightsBookings() {
+        return bookingsApi.getAllBookings();
+    }
+
+    @McpTool(description = "Get a flight booking by its reference number")
+    public Booking getFlightBooking(
+            @McpToolParam(description = "Booking reference number")
+            String bookingReference) {
+        return bookingsApi.getBooking(bookingReference);
+    }
+
+    @McpTool(description = "Create a new flight booking")
+    public Booking createFlightBooking(
+            @McpToolParam(description = "Booking request containing passengers list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), flightNumbers list, and travelDate")
+            CreateBookingRequest request) {
+        return bookingsApi.createBooking(request);
+    }
+
+    @McpTool(description = "Update an existing flight booking")
+    public Booking updateFlightBooking(
+            @McpToolParam(description = "Booking reference number")
+            String bookingReference,
+            @McpToolParam(description = "Update request containing passengers list (each with firstName, lastName, dateOfBirth, passportNumber, email, phoneNumber), flightNumbers list, and travelDate")
+            UpdateBookingRequest request) {
+        return bookingsApi.updateBooking(bookingReference, request);
+    }
+
+    @McpTool(description = "Cancel an existing flight booking")
+    public Booking cancelFlightBooking(
+            @McpToolParam(description = "Booking reference number")
+            String bookingReference) {
+        return bookingsApi.cancelBooking(bookingReference);
+    }
+}
+```
+
+in a similar fashion for Hotels and Rental Cars MCP Tools are developed.
+
+The full source code is available on GitHub:
+
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-mcp-server
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/cars/cars-mcp-server
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/hotels/hotels-mcp-server
+
+### MCP Server to Micoservice Communication
+
+MCP Servers are communicating with Microservices via REST API.
+
+To avoid duplicating code between MCP Servers and
+Microservices, [Declarative HTTP Service Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-service-client)
+are used.
+
+TBD - architecture diagram
+
+Each Microservice is implementing REST API presented as a Java API, for example:
+
+```java
+
+@HttpExchange("/api/v1/flights")
+public interface FlightsApi {
+
+    @GetExchange
+    List<Flight> getAllFlights(
+            @RequestParam(required = false) String departure,
+            @RequestParam(required = false) String arrival);
+
+    @GetExchange("/{flightNumber}")
+    Flight getFlightByNumber(@PathVariable String flightNumber);
+}
+```
+
+Then the same interface is used in the controller implementation:
+
+```java
+
+@RestController
+public class FlightsController implements FlightsApi {
+
+    // ...
+
+    @Override
+    public List<Flight> getAllFlights(String departure, String arrival) {
+        // ...
+    }
+
+    @Override
+    public Flight getFlightByNumber(String flightNumber) {
+        // ...
+    }
+}
+```
+
+as well for client creation:
+
+```java
+public class FlightsClientFactory {
+    private FlightsClientFactory() {
+    }
+
+    public static BookingsApi newBookingsApiClient(String baseUrl) {
+        return createClient(BookingsApi.class, baseUrl);
+    }
+
+    public static FlightsApi newFlightsApiClient(String baseUrl) {
+        return createClient(FlightsApi.class, baseUrl);
+    }
+
+    private static <S> S createClient(Class<S> serviceType, String baseUrl) {
+        RestClient restClient = RestClient.create(baseUrl);
+        RestClientAdapter adapter = RestClientAdapter.create(restClient);
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
+        return factory.createClient(serviceType);
+    }
+}
+```
+
+Then each REST API Client bean is created like below:
+
+```java
+
+@Configuration
+public class FlightsRestApiClientConfiguration {
+    @Value("${flights.api.base-uri}")
+    private String baseUri;
+
+    @Bean
+    public BookingsApi bookingsApi() {
+        return FlightsClientFactory.newBookingsApiClient(baseUri);
+    }
+
+    @Bean
+    public FlightsApi flightsApi() {
+        return FlightsClientFactory.newFlightsApiClient(baseUri);
+    }
+}
+```
+
+Down-line Microservice URLs are configured in application properties:
+
+```properties
+flights.api.base-uri=${FLIGHTS_API_BASE_URI:http://localhost:8020}
+```
+
+By default, they are pointing to local development environment,
+during deployment `FLIGHTS_API_BASE_URI` environment variable is set to the actual URL of the Microservice.
+
+The full source code is available on GitHub (using flights example, but the same approach is used for hotels and cars):
+
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-api
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-client
+- https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/flights/flights-mcp-server/src/main/java/com/dominikcebula/spring/ai/flights/configuration/FlightsRestApiClientConfiguration.java
 
 ### Microservices
 
