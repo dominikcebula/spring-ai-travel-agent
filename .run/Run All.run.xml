@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="Run All" type="CompoundRunConfigurationType">
+        <toRun name="Agent Chat UI" type="js.build_tools.npm"/>
         <toRun name="AgentApplication" type="SpringBootApplicationConfigurationType"/>
         <toRun name="CarsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
         <toRun name="CarsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
