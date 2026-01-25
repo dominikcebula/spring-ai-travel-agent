@@ -463,4 +463,7 @@ TBD
 
 ## References
 
-TBD
+- [Source Code on GitHub](https://github.com/dominikcebula/spring-ai-travel-agent/)
+- [Spring AI Documentation](https://docs.spring.io/spring-ai/reference/)
+- [Awesome Spring AI](https://github.com/spring-ai-community/awesome-spring-ai)
+- [react-chatbotify.com](https://react-chatbotify.com/)
