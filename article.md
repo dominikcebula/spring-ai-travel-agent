@@ -1,5 +1,7 @@
 # AI Travel Agent using Spring AI
 
+![logo.png](docs/logo.png)
+
 ## Introduction
 
 In this article, I'll describe how I created a simplified travel agent using Spring AI.
