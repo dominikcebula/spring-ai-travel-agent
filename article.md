@@ -38,7 +38,21 @@ MCP protocol, which is a solution well suited for AI agents.
 
 ## Note on the Solution
 
-TBD - describe why separate deployment units and pros and cons
+Note that there are different ways on how this problem could be decomposed and implemented.
+
+Instead of having dedicated MCP Servers for each domain as a separate deployment unit,
+MCP Servers could be combined into a Microservice that would expose both REST APIs and MCP protocol.
+
+The other option would be to implement MCP Tools directly on the Agent side,
+so that the Agent would execute REST API calls to the Microservices directly, without the MCP Server layer.
+
+The other approach would be to use Spring Modulith to implement the entire solution as a single
+modular monolith application, with each domain implemented as a separate module.
+
+Different approaches are possible and could be used depending on the requirements and preferences of the project.
+
+The current approach offers decoupling, independent deployment, fine-grained scalability in exchange for complexity,
+latency, networking overhead.
 
 ## Tech Stack
 
