@@ -457,7 +457,94 @@ The full source code is available on GitHub (using flights example, but the same
 
 ### Microservices
 
-TBD
+Three Microservices are used in this solution:
+
+- Flights Microservice
+- Hotels Microservice
+- Cars Microservice
+
+Each Micoservice is developed using Spring Boot and exposes REST API for search and bookings operations for each domain.
+
+For simplicity, each Microservice is using in-memory storage for storing booking data.
+
+Each Microservice is implementing API interface declared as a Java interface. This is to avoid code duplications between
+REST API Service implementation and REST API Client.
+
+Here is the example Flights Booking API declared as a Java interface:
+
+```java
+
+@HttpExchange("/api/v1/bookings")
+public interface BookingsApi {
+
+    @GetExchange
+    List<Booking> getAllBookings();
+
+    @GetExchange("/{bookingReference}")
+    Booking getBooking(@PathVariable String bookingReference);
+
+    @PostExchange
+    Booking createBooking(@RequestBody CreateBookingRequest request);
+
+    @PutExchange("/{bookingReference}")
+    Booking updateBooking(@PathVariable String bookingReference, @RequestBody UpdateBookingRequest request);
+
+    @DeleteExchange("/{bookingReference}")
+    Booking cancelBooking(@PathVariable String bookingReference);
+}
+```
+
+Here is the example Flights Booking REST API Service implementation:
+
+```java
+
+@RestController
+public class BookingsController implements BookingsApi {
+
+    private final BookingsService bookingsService;
+
+    public BookingsController(BookingsService bookingsService) {
+        this.bookingsService = bookingsService;
+    }
+
+    @Override
+    public List<Booking> getAllBookings() {
+        return bookingsService.getAllBookings();
+    }
+
+    @Override
+    public Booking getBooking(String bookingReference) {
+        return bookingsService.getBookingByReference(bookingReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.CREATED)
+    public Booking createBooking(CreateBookingRequest request) {
+        return bookingsService.createBooking(request);
+    }
+
+    @Override
+    public Booking updateBooking(String bookingReference, UpdateBookingRequest request) {
+        return bookingsService.updateBooking(bookingReference, request)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
+    }
+
+    @Override
+    public Booking cancelBooking(String bookingReference) {
+        return bookingsService.cancelBooking(bookingReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingReference));
+    }
+}
+```
+
+Most of the business logic is implemented in `Service` classes, data are kept in in-memory repository classes.
+
+The full source code is available on GitHub:
+
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/cars/cars-microserivce
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/hotels/hotels-microserivce
 
 ### Running the project Locally
 
@@ -465,8 +552,10 @@ TBD
 
 ## Further Enhancements
 
+The following enhancements can be implemented in the future:
+
 - Memory of conversations between user and agent should be persisted in a database.
-- Conversations should be isolated between users.
+- Conversations isolation between users.
 - Agent correctness evaluation
 - Short-term memory (STM) and long-term memory (LTM) support, including user preference extraction and storage
 - Security hardening
