@@ -341,7 +341,7 @@ To avoid duplicating code between MCP Servers and
 Microservices, [Declarative HTTP Service Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-service-client)
 are used.
 
-TBD - architecture diagram
+![MCP_Server_to_Microservice_Communication.drawio.png](docs/MCP_Server_to_Microservice_Communication.drawio.png)
 
 Each Microservice is implementing REST API presented as a Java API, for example:
 

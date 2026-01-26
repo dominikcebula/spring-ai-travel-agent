@@ -61,15 +61,7 @@ Each MCP Server connects to its corresponding Microservice via REST API using Sp
 Client** (`HttpServiceProxyFactory`). The API contracts are defined as interfaces with `@HttpExchange` annotations in
 the `*-microserivce-api` modules, which are shared between the microservice (server) and the client.
 
-```
-┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
-│   MCP Server    │─────▶│  Client Module  │─────▶│  Microservice   │
-│ (exposes tools) │      │ (HTTP Service)  │      │   (REST API)    │
-└─────────────────┘      └─────────────────┘      └─────────────────┘
-        │                        │                        │
-   @McpTool             HttpServiceProxyFactory     @RestController
-   annotations          + RestClientAdapter         + @HttpExchange
-```
+![MCP_Server_to_Microservice_Communication.drawio.png](docs/MCP_Server_to_Microservice_Communication.drawio.png)
 
 ## 🔧 MCP Tools
 
