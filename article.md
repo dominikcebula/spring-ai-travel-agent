@@ -23,7 +23,7 @@ TBD
 
 The diagram below depicts the architecture of the solution.
 
-TBD - architecture diagram
+![architecture.drawio.png](docs/architecture.drawio.png)
 
 Project is divided into 3 domains:
 
