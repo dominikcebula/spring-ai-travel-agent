@@ -349,7 +349,7 @@ The full source code is available on GitHub:
 
 ### MCP Server to Micoservice Communication
 
-MCP Servers are communicating with Microservices via REST API.
+MCP Servers are communicating with backing Microservices via REST API.
 
 To avoid duplicating code between MCP Servers and
 Microservices, [Declarative HTTP Service Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-service-client)
