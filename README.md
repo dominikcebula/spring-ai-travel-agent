@@ -12,6 +12,8 @@ The system showcases a microservices architecture where each travel domain (flig
 independent service, with **MCP servers** exposing their functionality as **AI-callable tools**. The central agent
 orchestrates these tools using AWS Bedrock (Claude Opus 4.5) to provide a seamless booking experience.
 
+See also the full [article.md](article.md) describing the project.
+
 ![agent-chat-ui.png](docs/agent-chat-ui.png)
 
 ### Key Features
