@@ -4,20 +4,22 @@
 
 ## Introduction
 
-In this article, I'll describe how I created a simplified travel agent using Spring AI.
+In this article, I will describe how I built a simplified AI-powered travel agent using Spring AI.
 
-The end result is an AI-powered travel agent that can help you search, and book flights, hotels, and rental cars through
-natural language interactions.
+The end result is a conversational travel assistant that helps users search for and book flights, hotels, and rental
+cars through natural language interactions.
 
-Agent will be accessible through a chat web interface built using ReactJS. Looking like this:
+The agent is accessible through a web-based chat interface built with React. It looks like this:
 
 ![agent-chat-ui.png](docs/agent-chat-ui.png)
 
-Full source code is available on GitHub: https://github.com/dominikcebula/spring-ai-travel-agent
+The full source code is available on GitHub:
+
+https://github.com/dominikcebula/spring-ai-travel-agent
 
 ## Demo
 
-Below are some screenshots showing the agent in action when booking a trip from Kraków to Frankurt:
+Below are screenshots showing the agent in action while booking a trip from Kraków to Frankfurt:
 
 ![demo_01.png](docs/demo_01.png)
 
@@ -37,46 +39,46 @@ Below are some screenshots showing the agent in action when booking a trip from 
 
 ## Architecture
 
-The diagram below depicts the architecture of the solution.
+The diagram below illustrates the overall architecture of the solution.
 
 ![architecture.drawio.png](docs/architecture.drawio.png)
 
-Project is divided into 3 domains:
+The project is divided into three domains:
 
-* Flights
-* Hotels
-* Rental Cars
+- Flights
+- Hotels
+- Rental Cars
 
-Each domain consists of MCP Server, MCP Tools, API, and Microservice that implements the API.
+Each domain consists of an MCP Server, a set of MCP Tools, a REST API, and a Microservice that implements the API.
 
-Under each domain it's possible to execute search operations as well as manage created bookings, using REST API or using
-MCP protocol, which is a solution well suited for AI agents.
+Within each domain, it is possible to perform search operations and manage bookings either via a REST API or through the
+MCP protocol, which is well suited for AI agent integrations.
 
-## Note on the Solution
+## Notes on the Solution Design
 
-Note that there are different ways on how this problem could be decomposed and implemented.
+There are multiple ways this problem could be decomposed and implemented.
 
-Instead of having dedicated MCP Servers for each domain as a separate deployment unit,
-MCP Servers could be combined into a Microservice that would expose both REST APIs and MCP protocol.
+Instead of deploying a dedicated MCP Server per domain, the MCP Servers could be combined into a single Microservice
+exposing both REST APIs and the MCP protocol.
 
-The other option would be to implement MCP Tools directly on the Agent side,
-so that the Agent would execute REST API calls to the Microservices directly, without the MCP Server layer.
+Another option would be to implement MCP Tools directly on the agent side, allowing the agent to call Microservices via
+REST without an intermediate MCP Server layer.
 
-The other approach would be to use Spring Modulith to implement the entire solution as a single
-modular monolith application, with each domain implemented as a separate module.
+Alternatively, the entire solution could be implemented as a modular monolith using Spring Modulith, with each domain
+represented as a separate module.
 
-Different approaches are possible and could be used depending on the requirements and preferences of the project.
+Different approaches may be preferable depending on project requirements, team preferences, and operational constraints.
 
-The current approach offers decoupling, independent deployment, fine-grained scalability in exchange for complexity,
-latency, networking overhead.
+The current approach prioritizes decoupling, independent deployments, and fine-grained scalability, at the cost of
+increased complexity, network overhead, and latency.
 
 ## Tech Stack
 
-Below is a list of technologies used in the solution.
+The following technologies are used in this solution:
 
 | Layer    | Technology                                     |
 |----------|------------------------------------------------|
-| AI/LLM   | Spring AI 1.1.2                                |
+| AI / LLM | Spring AI 1.1.2                                |
 | Backend  | Java 21, Spring Boot 3.5.9, Spring AI MCP      |
 | Frontend | React 19, TypeScript, react-chatbotify         |
 | Protocol | Model Context Protocol (MCP) - Streamable HTTP |
