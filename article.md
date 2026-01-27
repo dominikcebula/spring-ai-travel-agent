@@ -548,7 +548,57 @@ The full source code is available on GitHub:
 
 ### Running the project Locally
 
-TBD
+To run the project locally, you will need the following prerequisites:
+
+- Java 21+
+- Maven 3.9+
+- Node.js 18+
+- AWS account with Bedrock access (Amazon Nova model enabled)
+- AWS credentials configured (`~/.aws/credentials` or environment variables)
+
+Having all the prerequisites in place, you can clone the project:
+
+```bash
+git clone https://github.com/dominikcebula/spring-ai-travel-agent.git
+```
+
+Now build the project:
+
+```bash
+mvn clean install
+```
+
+Run all the services:
+
+```bash
+# Microservices
+(cd cars/cars-microserivce && mvn spring-boot:run) &
+(cd flights/flights-microserivce && mvn spring-boot:run) &
+(cd hotels/hotels-microserivce && mvn spring-boot:run) &
+
+# MCP Servers
+(cd cars/cars-mcp-server && mvn spring-boot:run) &
+(cd flights/flights-mcp-server && mvn spring-boot:run) &
+(cd hotels/hotels-mcp-server && mvn spring-boot:run) &
+
+# Agent
+(cd agent && mvn spring-boot:run) &
+```
+
+Run the agent chat UI:
+
+```bash
+cd agent-chat-ui
+npm install
+npm start
+```
+
+Alternatively, you can use IntelliJ Run Configuration included in the repo to run all the services and the agent chat
+UI.
+
+Having the above completed, visit http://localhost:3000/.
+
+You can now interact with the agent and search for flights, hotels, and rental cars as well as create bookings.
 
 ## Further Enhancements
 
