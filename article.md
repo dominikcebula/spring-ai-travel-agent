@@ -86,7 +86,7 @@ Below is a list of technologies used in the solution.
 
 ### Agent
 
-Agent is created using Spring AI. It is using the Amazon Nova Micro model hosted in Amazon Bedrock.
+Agent is created using Spring AI. It is using the Claude Opus 4.5 model hosted in Amazon Bedrock.
 
 Agent accesses MCP Tools for Flights, Hotels, and Rental Cars using MCP Client. MCP Server for each domain is accessing
 a backing Microservice via REST API to execute business logic for search and bookings operations for each domain.
@@ -149,7 +149,8 @@ spring:
       converse:
         chat:
           options:
-            model: eu.amazon.nova-micro-v1:0
+            model: eu.anthropic.claude-opus-4-5-20251101-v1:0
+            max-tokens: 4096
     mcp:
       client:
         streamable-http:
@@ -569,7 +570,7 @@ To run the project locally, you will need the following prerequisites:
 - Java 21+
 - Maven 3.9+
 - Node.js 18+
-- AWS account with Bedrock access (Amazon Nova model enabled)
+- AWS account with Bedrock access (Claude Opus 4.5 model enabled)
 - AWS credentials configured (`~/.aws/credentials` or environment variables)
 
 Having all the prerequisites in place, you can clone the project:

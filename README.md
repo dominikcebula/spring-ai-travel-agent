@@ -10,7 +10,7 @@ compare, and book flights, hotels, and rental cars through natural language inte
 
 The system showcases a microservices architecture where each travel domain (flights, hotels, cars) is implemented as an
 independent service, with **MCP servers** exposing their functionality as **AI-callable tools**. The central agent
-orchestrates these tools using AWS Bedrock (Amazon Nova) to provide a seamless booking experience.
+orchestrates these tools using AWS Bedrock (Claude Opus 4.5) to provide a seamless booking experience.
 
 ![agent-chat-ui.png](docs/agent-chat-ui.png)
 
@@ -116,7 +116,7 @@ The AI agent has access to the following tools exposed by MCP servers:
 - Java 21+
 - Maven 3.9+
 - Node.js 18+
-- AWS account with Bedrock access (Amazon Nova model enabled)
+- AWS account with Bedrock access (Claude Opus 4.5 model enabled)
 - AWS credentials configured (`~/.aws/credentials` or environment variables)
 
 ### Running Locally
