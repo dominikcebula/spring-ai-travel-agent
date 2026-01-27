@@ -17,7 +17,23 @@ Full source code is available on GitHub: https://github.com/dominikcebula/spring
 
 ## Demo
 
-TBD
+Below are some screenshots showing the agent in action when booking a trip from Kraków to Frankurt:
+
+![demo_01.png](docs/demo_01.png)
+
+![demo_02.png](docs/demo_02.png)
+
+![demo_03.png](docs/demo_03.png)
+
+![demo_04.png](docs/demo_04.png)
+
+![demo_05.png](docs/demo_05.png)
+
+![demo_06.png](docs/demo_06.png)
+
+![demo_07.png](docs/demo_07.png)
+
+![demo_08.png](docs/demo_08.png)
 
 ## Architecture
 
