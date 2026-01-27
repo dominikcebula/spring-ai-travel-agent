@@ -638,7 +638,16 @@ The following enhancements could be implemented in the future:
 
 ## Summary
 
-TBD
+This article demonstrated how to build an AI-powered travel agent using Spring AI. The solution uses a microservices
+architecture with three domains – flights, hotels, and rental cars – each consisting of a REST API microservice, an MCP
+server exposing tools to the AI agent.
+
+The central agent, powered by Claude Opus 4.5 running on Amazon Bedrock, connects to MCP servers via streamable HTTP and
+uses a system prompt to constrain its behavior to travel-related tasks. A React-based chat UI built with
+react-chatbotify provides the user interface for natural language interactions.
+
+The project serves as a practical example of using Spring AI to build conversational AI applications that
+can perform real actions through tool calling.
 
 ## References
 
