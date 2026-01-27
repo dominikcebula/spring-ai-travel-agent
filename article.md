@@ -88,17 +88,18 @@ The following technologies are used in this solution:
 
 ### Agent
 
-Agent is created using Spring AI. It is using the Claude Opus 4.5 model hosted in Amazon Bedrock.
+The agent is built using Spring AI and uses the Claude Opus 4.5 model hosted on Amazon Bedrock.
 
-Agent accesses MCP Tools for Flights, Hotels, and Rental Cars using MCP Client. MCP Server for each domain is accessing
-a backing Microservice via REST API to execute business logic for search and bookings operations for each domain.
+It accesses MCP tools for flights, hotels, and rental cars via an MCP client. For each domain, an MCP server
+communicates with a backing microservice over a REST API to execute the business logic for search and booking
+operations.
 
-Agent is using an in-memory chat history to remember conversations between user and agent.
+The agent uses an in-memory chat history to retain context across conversations with the user.
 
-To narrow down the agent interactions with the user to "helpful travel assistant who can help with booking flights,
-hotels, and rental cars", system prompt is used to control agent behavior.
+To constrain the agent’s interactions to those of a “helpful travel assistant” that supports booking flights, hotels,
+and rental cars, a system prompt is used to guide and control the agent’s behavior.
 
-Agent code looks like this:
+The agent code looks like this:
 
 ```java
 
@@ -140,7 +141,7 @@ public class AgentController {
 
 ```
 
-Agent accesses MCP Tools using MCP Client defined under `application.yml`:
+The agent accesses MCP tools using an MCP client configured in `application.yml`:
 
 ```yaml
 spring:
@@ -167,7 +168,7 @@ server:
   port: 8050
 ```
 
-Agent can be used without Web UI by executing reqeusts against `/api/v1/agent` endpoint with user input, for example:
+The agent can be used without a web UI by sending requests to the `/api/v1/agent` endpoint with user input. For example:
 
 ```bash
 $ curl http://localhost:8050/api/v1/agent?userInput=Show%20me%20all%20Hotels%20available%20at%20Krakow
@@ -202,14 +203,15 @@ Here are the hotels available in Krakow with rooms available:
 ...
 ```
 
-Full agent source code is available on GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent
+The full source code for the agent is available on
+GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent
 
 ### Agent Chat Web UI
 
-Agent Chat Web UI is built using ReactJS and [react-chatbotify](https://react-chatbotify.com/). It's using
-`/api/v1/agent` endpoint to communicate with the agent.
+The agent’s chat web UI is built with ReactJS and [react-chatbotify](https://react-chatbotify.com/). It communicates
+with the agent via the `/api/v1/agent` endpoint.
 
-Chatbot UI source code looks like this:
+The chatbot UI source code looks like this:
 
 ```typescript jsx
     <ChatBot flow={flow}
@@ -235,7 +237,7 @@ Chatbot UI source code looks like this:
              }}/>
 ```
 
-The code that calls Agent API is below:
+The code that calls the agent API is shown below:
 
 ```typescript jsx
 async function callAgent(userInput: string): Promise<string> {
@@ -266,20 +268,21 @@ const flow: Flow = {
 };
 ```
 
-Then end results allow the user to interact with the agent like this:
+The end result allows the user to interact with the agent like this:
 
 ![agent-chat-ui-02.png](docs/agent-chat-ui-02.png)
 
-Full source code is available on GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent-chat-ui
+The full source code is available on
+GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent-chat-ui
 
 ### MCP Servers and MCP Tools
 
-MCP Servers are hosting MCP Tools for each domain allowing the agent to access and manager booking data.
+MCP servers host MCP tools for each domain, allowing the agent to access and manage booking data.
 
-Each MCP Server is sort of like a wrapper around backing Microservice,
-which is responsible for executing business logic for search and bookings operations for each domain.
+Each MCP server acts as a wrapper around a backing microservice, which handles the business logic for search and booking
+operations within its domain.
 
-Here is an example MCP Tools for Flights Search:
+Here is an example of MCP tools for flight search:
 
 ```java
 
@@ -309,7 +312,7 @@ public class FlightsTools {
 }
 ```
 
-and here is an example MCP Tools for Flights Booking:
+Here is an example of MCP tools for flight booking:
 
 ```java
 
@@ -358,7 +361,7 @@ public class BookingsTools {
 }
 ```
 
-in a similar fashion for Hotels and Rental Cars MCP Tools are developed.
+MCP tools for hotels and rental cars are developed in a similar manner.
 
 The full source code is available on GitHub:
 
@@ -368,15 +371,15 @@ The full source code is available on GitHub:
 
 ### MCP Server to Micoservice Communication
 
-MCP Servers are communicating with backing Microservices via REST API.
+MCP servers communicate with backing microservices via REST APIs.
 
-To avoid duplicating code between MCP Servers and
-Microservices, [Declarative HTTP Service Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-service-client)
+To avoid duplicating code between MCP servers and
+microservices, [Declarative HTTP Service Clients](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-service-client)
 are used.
 
 ![MCP_Server_to_Microservice_Communication.drawio.png](docs/MCP_Server_to_Microservice_Communication.drawio.png)
 
-Each Microservice is implementing REST API presented as a Java API, for example:
+Each microservice exposes a REST API that is also represented as a Java interface, for example:
 
 ```java
 
@@ -393,7 +396,7 @@ public interface FlightsApi {
 }
 ```
 
-Then the same interface is used in the controller implementation:
+The same interface is then used in the controller implementation:
 
 ```java
 
@@ -414,7 +417,7 @@ public class FlightsController implements FlightsApi {
 }
 ```
 
-as well for client creation:
+It is also used for client creation:
 
 ```java
 public class FlightsClientFactory {
@@ -438,7 +441,7 @@ public class FlightsClientFactory {
 }
 ```
 
-Then each REST API Client bean is created like below:
+Each REST API client bean is then created as shown below:
 
 ```java
 
@@ -459,16 +462,17 @@ public class FlightsRestApiClientConfiguration {
 }
 ```
 
-Down-line Microservice URLs are configured in application properties:
+Downstream microservice URLs are configured in the application properties:
 
 ```properties
 flights.api.base-uri=${FLIGHTS_API_BASE_URI:http://localhost:8020}
 ```
 
-By default, they are pointing to local development environment,
-during deployment `FLIGHTS_API_BASE_URI` environment variable is set to the actual URL of the Microservice.
+By default, these URLs point to the local development environment. During deployment, the `FLIGHTS_API_BASE_URI`
+environment variable is set to the actual URL of the microservice.
 
-The full source code is available on GitHub (using flights example, but the same approach is used for hotels and cars):
+The full source code is available on GitHub (using the flights example, but the same approach applies to hotels and
+rental cars):
 
 - https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-api
 - https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-client
@@ -482,14 +486,15 @@ Three Microservices are used in this solution:
 - Hotels Microservice
 - Cars Microservice
 
-Each Micoservice is developed using Spring Boot and exposes REST API for search and bookings operations for each domain.
+Each microservice is developed with Spring Boot and exposes a REST API to handle search and booking operations for its
+domain.
 
-For simplicity, each Microservice is using in-memory storage for storing booking data.
+For simplicity, each microservice uses in-memory storage to manage booking data.
 
-Each Microservice is implementing API interface declared as a Java interface. This is to avoid code duplications between
-REST API Service implementation and REST API Client.
+Each microservice implements its API as a Java interface to avoid code duplication between the REST API service
+implementation and the REST API client.
 
-Here is the example Flights Booking API declared as a Java interface:
+Here is an example of the Flights Booking API declared as a Java interface:
 
 ```java
 
@@ -513,7 +518,7 @@ public interface BookingsApi {
 }
 ```
 
-Here is the example Flights Booking REST API Service implementation:
+Here is an example implementation of the Flights Booking REST API service:
 
 ```java
 
@@ -557,7 +562,7 @@ public class BookingsController implements BookingsApi {
 }
 ```
 
-Most of the business logic is implemented in `Service` classes, data are kept in in-memory repository classes.
+Most of the business logic is implemented in `Service` classes, while data is stored in in-memory repository classes.
 
 The full source code is available on GitHub:
 
@@ -575,13 +580,13 @@ To run the project locally, you will need the following prerequisites:
 - AWS account with Bedrock access (Claude Opus 4.5 model enabled)
 - AWS credentials configured (`~/.aws/credentials` or environment variables)
 
-Having all the prerequisites in place, you can clone the project:
+Once all prerequisites are in place, you can clone the project:
 
 ```bash
 git clone https://github.com/dominikcebula/spring-ai-travel-agent.git
 ```
 
-Now build the project:
+Build the project:
 
 ```bash
 mvn clean install
@@ -612,24 +617,24 @@ npm install
 npm start
 ```
 
-Alternatively, you can use IntelliJ Run Configuration included in the repo to run all the services and the agent chat
-UI.
+Alternatively, you can use the IntelliJ run configurations included in the repository to start all the services and the
+agent chat UI.
 
-Having the above completed, visit http://localhost:3000/.
+Once everything is running, open http://localhost:3000/.
 
-You can now interact with the agent and search for flights, hotels, and rental cars as well as create bookings.
+You can now interact with the agent to search for flights, hotels, and rental cars, as well as create bookings.
 
 ## Further Enhancements
 
-The following enhancements can be implemented in the future:
+The following enhancements could be implemented in the future:
 
-- Memory of conversations between user and agent should be persisted in a database.
-- Conversations isolation between users.
-- Agent correctness evaluation
-- Short-term memory (STM) and long-term memory (LTM) support, including user preference extraction and storage
-- Security hardening
-- Flights / Hotels / Rental Cars data should be persisted in a database.
-- Validation of user input should be performed on the Microservices side.
+- Persist conversation history between the user and the agent in a database.
+- Ensure conversation isolation between different users.
+- Implement agent correctness evaluation.
+- Add short-term memory (STM) and long-term memory (LTM) support, including extraction and storage of user preferences.
+- Security hardening.
+- Store flights, hotels, and rental cars data in a database.
+- Perform validation of user input on the microservices side.
 
 ## Summary
 
