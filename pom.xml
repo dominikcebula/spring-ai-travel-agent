@@ -15,6 +15,8 @@
     <modules>
         <module>parent</module>
 
+        <module>mcp-gateway</module>
+
         <module>cars</module>
         <module>flights</module>
         <module>hotels</module>

@@ -1,0 +1,19 @@
+spring:
+  ai:
+    mcp:
+      client:
+        streamable-http:
+          connections:
+            cars-mcp-server:
+              url: ${CARS_MCP_URL:http://localhost:8011}
+            flights-mcp-server:
+              url: ${FLIGHTS_MCP_URL:http://localhost:8021}
+            hotels-mcp-server:
+              url: ${HOTELS_MCP_URL:http://localhost:8031}
+      server:
+        name: ${spring.application.name}
+        protocol: STREAMABLE
+  application:
+    name: mcp-gateway
+server:
+  port: 8060
