@@ -3,10 +3,22 @@ import ChatBot, {Flow, Params} from "react-chatbotify";
 import './App.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+const CONVERSATION_ID_KEY = 'travel_agent_conversation_id';
+
+function getOrCreateConversationId(): string {
+    let conversationId = localStorage.getItem(CONVERSATION_ID_KEY);
+    if (!conversationId) {
+        conversationId = crypto.randomUUID();
+        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+    }
+    return conversationId;
+}
+
+const conversationId = getOrCreateConversationId();
 
 async function callAgent(userInput: string): Promise<string> {
     const response = await fetch(
-        `${API_BASE_URL}/api/v1/agent?userInput=${encodeURIComponent(userInput)}`
+        `${API_BASE_URL}/api/v1/agent?userInput=${encodeURIComponent(userInput)}&conversationId=${encodeURIComponent(conversationId)}`
     );
     if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

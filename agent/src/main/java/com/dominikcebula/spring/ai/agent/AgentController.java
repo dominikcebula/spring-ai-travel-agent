@@ -6,7 +6,10 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -36,9 +39,10 @@ public class AgentController {
     }
 
     @GetMapping("/agent")
-    public String generation(String userInput) {
+    public String generation(@RequestParam String userInput, @RequestParam UUID conversationId) {
         return chatClient.prompt()
                 .user(userInput)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .call()
                 .content();
     }
