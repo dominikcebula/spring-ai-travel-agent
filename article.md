@@ -577,6 +577,7 @@ To run the project locally, you will need the following prerequisites:
 - Java 21+
 - Maven 3.9+
 - Node.js 18+
+- Docker / Docker Compose
 - AWS account with Bedrock access (Claude Opus 4.5 model enabled)
 - AWS credentials configured (`~/.aws/credentials` or environment variables)
 

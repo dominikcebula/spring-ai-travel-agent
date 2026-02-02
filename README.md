@@ -118,6 +118,7 @@ The AI agent has access to the following tools exposed by MCP servers:
 - Java 21+
 - Maven 3.9+
 - Node.js 18+
+- Docker / Docker Compose
 - AWS account with Bedrock access (Claude Opus 4.5 model enabled)
 - AWS credentials configured (`~/.aws/credentials` or environment variables)
 

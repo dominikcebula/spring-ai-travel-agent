@@ -1,16 +1,17 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="AgentApplication" type="SpringBootApplicationConfigurationType"
-                   factoryName="Spring Boot" nameIsGenerated="true">
-        <module name="agent"/>
-        <option name="SPRING_BOOT_MAIN_CLASS" value="com.dominikcebula.spring.ai.agent.AgentApplication"/>
-        <extension name="coverage">
-            <pattern>
-                <option name="PATTERN" value="com.dominikcebula.spring.ai.agent.*"/>
-                <option name="ENABLED" value="true"/>
-            </pattern>
-        </extension>
-        <method v="2">
-            <option name="Make" enabled="true"/>
-        </method>
-    </configuration>
+  <configuration default="false" name="AgentApplication" type="SpringBootApplicationConfigurationType"
+                 factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="agent"/>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.dominikcebula.spring.ai.agent.AgentApplication"/>
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/agent"/>
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.dominikcebula.spring.ai.agent.*"/>
+        <option name="ENABLED" value="true"/>
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true"/>
+    </method>
+  </configuration>
 </component>

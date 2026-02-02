@@ -1,0 +1,10 @@
+services:
+  mongo:
+    image: 'mongo:8.2.4-noble'
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: travel-agent-chat
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
