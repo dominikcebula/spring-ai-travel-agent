@@ -64,7 +64,13 @@ that are matching the user preferences.
 
 Here is an example conversation between a user and an AI travel agent when the chat history is maintained:
 
-TBD
+![Screenshot from 2026-02-03 20-51-30.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2020-51-30.png)
+
+![Screenshot from 2026-02-03 21-10-25.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2021-10-25.png)
+
+![Screenshot from 2026-02-03 21-12-29.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2021-12-29.png)
+
+With chat history, the AI is able to remember user preferences and book cars that are matching the user preferences.
 
 ## Why persist Chat History?
 
