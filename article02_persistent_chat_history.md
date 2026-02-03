@@ -72,6 +72,19 @@ Here is an example conversation between a user and an AI travel agent when the c
 
 With chat history, the AI is able to remember user preferences and book cars that are matching the user preferences.
 
+## Short-term memory vs. long-term memory
+
+In this article I will focus on Chat History, which is a short-term memory. It stores conversation history for a
+single user, as a series of events. Each question and answer is stored. This allows the agent to access the context of
+the current conversation and provide relevant, contextual responses.
+
+Long-term memory is information extracted from the conversation and stored in a structured format, it contains key
+information, such as user preferences, facts, knowledge. Long-term memory usually involves extraction and consolidation
+of information from the conversation.
+
+Long-term memory is outside the scope of this article. If time allows, I will cover it in the next article. Keep in mind
+that user preference should be extracted from Chat History and stored for future use.
+
 ## Why persist Chat History?
 
 TBD
