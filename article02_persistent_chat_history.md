@@ -52,6 +52,20 @@ By keeping chat history, the AI can adapt to user preferences over the course of
 Even within a single session, this significantly improves response quality and makes the interaction feel natural rather
 than mechanical.
 
+Below is an example conversation between a user and an AI travel agent when the chat history is not maintained:
+
+![Screenshot from 2026-02-03 20-51-30.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2020-51-30.png)
+
+![Screenshot from 2026-02-03 20-53-40.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2020-53-40.png)
+
+Without any chat history, each user message is processed independently, without any contextual information,
+as a result, in the provided example Agent is unable to remember car rental preferences, and it is unable to book cars
+that are matching the user preferences.
+
+Here is an example conversation between a user and an AI travel agent when the chat history is maintained:
+
+TBD
+
 ## Why persist Chat History?
 
 TBD
