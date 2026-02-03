@@ -197,7 +197,7 @@ TBD
 
 ## How to implement conversation history isolation?
 
-TBD
+TBD - frontend and backend, conversationId on API side and in frontend, storage in local storage
 
 ## Architecture
 
