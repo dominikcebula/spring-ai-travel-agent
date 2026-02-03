@@ -113,7 +113,7 @@ public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvide
 }
 ```
 
-I have added a dependency to MongoDB Chat Memory in `pom.xml` which auto-configures `MongoChatMemoryRepository` and uses
+I have added a dependency to MongoDB Chat Memory in `pom.xml` which autoconfigures `MongoChatMemoryRepository` and uses
 it as the implementation of `ChatMemoryRepository` which is then used by `ChatClient`.
 
 Added Maven dependency looks like below:
