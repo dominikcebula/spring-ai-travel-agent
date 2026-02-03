@@ -104,7 +104,7 @@ In my case I used MongoDB as a persistent storage with `MongoChatMemoryRepositor
 `ChatClient` creation was not changed and it looks like this:
 
 ```java
-    public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory) {
+public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory) {
     this.chatClient = chatClientBuilder
             .defaultToolCallbacks(toolCallbackProvider)
             .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
