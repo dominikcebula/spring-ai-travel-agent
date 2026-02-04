@@ -4,13 +4,13 @@
 
 ## Introduction
 
-In this article, I will describe how to implement a persistent and isolated chat history for an AI travel agent
-using Spring AI. I will describe the importance of maintaining chat history, the reasons for persisting it, and the need
-for isolating conversation history per user. Additionally, I will provide a demo, architecture overview, and
+In this article, I will describe how to implement persistent and isolated chat history for an AI travel agent
+using Spring AI. I will cover the importance of maintaining chat history, the reasons for persisting it, and the need
+for isolating conversation history per user. Additionally, I will provide a demo, an architecture overview, and
 implementation details.
 
-This article builds on the previous one, [AI Travel Agent using Spring AI](article.md), have a look at it first, if you
-haven't already.
+This article builds on the previous one, [AI Travel Agent using Spring AI](article.md). If you haven't read it yet,
+I recommend starting there.
 
 ## Why Chat History is Important?
 
@@ -27,7 +27,7 @@ Chat history enables the AI to understand references to earlier messages, such a
 - Follow-up questions ("What about cheaper options?")
 - Progressive refinement ("Actually, make it a direct flight")
 
-Without chat history, each user message must restate all prior context, leading to repetitive promptsa and poor user
+Without chat history, each user message must restate all prior context, leading to repetitive prompts and a poor user
 experience.
 
 Travel planning is inherently iterative. A user might:
@@ -58,9 +58,9 @@ Below is an example conversation between a user and an AI travel agent when the 
 
 ![Screenshot from 2026-02-03 20-53-40.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2020-53-40.png)
 
-Without any chat history, each user message is processed independently, without any contextual information,
-as a result, in the provided example Agent is unable to remember car rental preferences, and it is unable to book cars
-that are matching the user preferences.
+Without any chat history, each user message is processed independently, without any contextual information.
+As a result, in the example above, the agent is unable to remember car rental preferences and cannot book cars
+that match the user's preferences.
 
 Here is an example conversation between a user and an AI travel agent when the chat history is maintained:
 
@@ -70,38 +70,38 @@ Here is an example conversation between a user and an AI travel agent when the c
 
 ![Screenshot from 2026-02-03 21-12-29.png](docs/article02_persistent_chat_history/Screenshot%20from%202026-02-03%2021-12-29.png)
 
-With chat history, the AI is able to remember user preferences and book cars that are matching the user preferences.
+With chat history, the AI can remember user preferences and book cars that match them.
 
 ## Short-term memory vs. long-term memory
 
-In this article I will focus on Chat History, which is a short-term memory. It stores conversation history for a
-single user, as a series of events. Each question and answer is stored. This allows the agent to access the context of
+In this article, I will focus on chat history, which is a form of short-term memory. It stores the conversation history
+for a single user as a series of events. Each question and answer is stored, allowing the agent to access the context of
 the current conversation and provide relevant, contextual responses.
 
-Long-term memory is information extracted from the conversation and stored in a structured format, it contains key
-information, such as user preferences, facts, knowledge. Long-term memory usually involves extraction and consolidation
-of information from the conversation.
+Long-term memory is information extracted from the conversation and stored in a structured format. It contains key
+information such as user preferences, facts, and knowledge. Long-term memory typically involves extraction and
+consolidation of information from conversations.
 
-Long-term memory is outside the scope of this article. If time allows, I will cover it in the next article. Keep in mind
-that user preference should be extracted from Chat History and stored for future use.
+Long-term memory is outside the scope of this article. If time permits, I will cover it in a future article. Keep in
+mind that user preferences should be extracted from chat history and stored for future use.
 
-## Why persist Chat History?
+## Why persist chat history?
 
-By default, Spring AI will store Chat History in-memory using `InMemoryChatMemoryRepository`. This is ok for
-development, but it is not suitable for production.
+By default, Spring AI stores chat history in memory using `InMemoryChatMemoryRepository`. This is fine for
+development but is not suitable for production.
 
-We need to persist the Chat History to a persistent storage so that it can be shared across multiple instances of the
-Agent Chat Service, and it can survive restarts.
+We need to persist the chat history to durable storage so that it can be shared across multiple instances of the
+agent chat service and survive restarts.
 
-## How to persist Chat History?
+## How to persist chat history?
 
-Chat History will be prested and accessed using `ChatMemoryRepository`.
+Chat history is persisted and accessed using `ChatMemoryRepository`.
 
-`ChatMemory` abstraction will manage chat memory and make decisions on which messages to keep and which to remove.
+The `ChatMemory` abstraction manages chat memory and decides which messages to keep and which to remove.
 
-In my case I used MongoDB as a persistent storage with `MongoChatMemoryRepository`.
+In my case, I used MongoDB as the persistent storage with `MongoChatMemoryRepository`.
 
-`ChatClient` creation was not changed and it looks like this:
+The `ChatClient` creation remains unchanged and looks like this:
 
 ```java
 public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory) {
@@ -113,10 +113,10 @@ public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvide
 }
 ```
 
-I have added a dependency to MongoDB Chat Memory in `pom.xml` which autoconfigures `MongoChatMemoryRepository` and uses
-it as the implementation of `ChatMemoryRepository` which is then used by `ChatClient`.
+I added a dependency for MongoDB chat memory in `pom.xml`, which autoconfigures `MongoChatMemoryRepository` and uses
+it as the implementation of `ChatMemoryRepository`, which is then used by `ChatClient`.
 
-Added Maven dependency looks like below:
+The Maven dependency looks like this:
 
 ```xml
 
@@ -126,7 +126,7 @@ Added Maven dependency looks like below:
 </dependency>
 ```
 
-To be able to run the application locally, I have configured `docker-compose.yaml` which looks like below:
+To run the application locally, I configured a `docker-compose.yaml` file as follows:
 
 ```yaml
 services:
@@ -141,7 +141,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: secret
 ```
 
-To start MongoDB as a Docker container using Docker Compose automatically, I have also added dependency to
+To automatically start MongoDB as a Docker container using Docker Compose, I also added a dependency on
 `spring-boot-docker-compose`:
 
 ```xml
@@ -152,9 +152,9 @@ To start MongoDB as a Docker container using Docker Compose automatically, I hav
 </dependency>
 ```
 
-Whenever a user interacts with the Agent, chat history is persisted in MongoDB.
+Whenever a user interacts with the agent, the chat history is persisted in MongoDB.
 
-Let's have a look at the MongoDB collection where chat history is stored:
+Let's look at the MongoDB collection where chat history is stored:
 
 ```bash
 $ mongosh -u admin -p secret localhost:27017
@@ -193,23 +193,23 @@ GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent
 
 ## Why isolate the conversation history per user?
 
-Without isolation, all users would share the same chat history. This would lead to a single conversation history
-containing all user messages. The result would be conversation context spilling over into unrelated conversations.
+Without isolation, all users would share the same chat history, resulting in a single conversation history
+containing all user messages. This would cause conversation context to spill over into unrelated conversations.
 
-As a result, AI would, for example, confuse users about their preferences, which would lead to incorrect bookings and
+As a result, the AI might confuse users' preferences, leading to incorrect bookings and
 a poor user experience.
 
 ## How to implement conversation history isolation?
 
-Conversation history isolation implementation requires changes both in the frontend and on the agent side.
+Implementing conversation history isolation requires changes on both the frontend and the agent side.
 
-In my case, on the frontend, I am keeping `conversationId` as `UUID` in the local storage. Whenever a user opens the
-app, I check if there is a `conversationId` in the local storage. If not, I generate a new one as a random UUID and
-store it in the local storage.
+On the frontend, I store a `conversationId` as a `UUID` in local storage. Whenever a user opens the
+app, I check if there is a `conversationId` in local storage. If not, I generate a new random UUID and
+store it.
 
-Whenever `/api/v1/agent` endpoint is called, I pass the `conversationId` as a query parameter.
+Whenever the `/api/v1/agent` endpoint is called, I pass the `conversationId` as a query parameter.
 
-The below code snippet shows how this is implemented on the frontend:
+The code snippet below shows how this is implemented on the frontend:
 
 ```typescript
 const CONVERSATION_ID_KEY = 'travel_agent_conversation_id';
@@ -236,11 +236,11 @@ async function callAgent(userInput: string): Promise<string> {
 }
 ```
 
-On the agent side, I am using `conversationId` as a query parameter, along with the user input.
+On the agent side, I receive `conversationId` as a query parameter along with the user input.
 
-`conversationId` is then used by `advisorSpec` to attach `CONVERSATION_ID` when using `chatClient`.
+The `conversationId` is then used by `advisorSpec` to set the `CONVERSATION_ID` when using `chatClient`.
 
-Below is the code snippet showing how this is implemented on the agent side:
+The code snippet below shows how this is implemented on the agent side:
 
 ```java
 
@@ -256,7 +256,7 @@ public String generation(@RequestParam String userInput, @RequestParam UUID conv
 
 ## Architecture
 
-The below diagram shows the architecture of the application updated with MongoDB used to persist chat history.
+The diagram below shows the application architecture, updated to include MongoDB for persisting chat history.
 
 ![architecture.drawio.png](docs/article02_persistent_chat_history/architecture.drawio.png)
 
