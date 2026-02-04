@@ -193,11 +193,66 @@ GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/agent
 
 ## Why isolate the conversation history per user?
 
-TBD
+Without isolation, all users would share the same chat history. This would lead to a single conversation history
+containing all user messages. The result would be conversation context spilling over into unrelated conversations.
+
+As a result, AI would, for example, confuse users about their preferences, which would lead to incorrect bookings and
+a poor user experience.
 
 ## How to implement conversation history isolation?
 
-TBD - frontend and backend, conversationId on API side and in frontend, storage in local storage
+Conversation history isolation implementation requires changes both in the frontend and on the agent side.
+
+In my case, on the frontend, I am keeping `conversationId` as `UUID` in the local storage. Whenever a user opens the
+app, I check if there is a `conversationId` in the local storage. If not, I generate a new one as a random UUID and
+store it in the local storage.
+
+Whenever `/api/v1/agent` endpoint is called, I pass the `conversationId` as a query parameter.
+
+The below code snippet shows how this is implemented on the frontend:
+
+```typescript
+const CONVERSATION_ID_KEY = 'travel_agent_conversation_id';
+
+function getOrCreateConversationId(): string {
+    let conversationId = localStorage.getItem(CONVERSATION_ID_KEY);
+    if (!conversationId) {
+        conversationId = crypto.randomUUID();
+        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+    }
+    return conversationId;
+}
+
+const conversationId = getOrCreateConversationId();
+
+async function callAgent(userInput: string): Promise<string> {
+    const response = await fetch(
+        `${API_BASE_URL}/api/v1/agent?userInput=${encodeURIComponent(userInput)}&conversationId=${encodeURIComponent(conversationId)}`
+    );
+    if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+    }
+    return response.text();
+}
+```
+
+On the agent side, I am using `conversationId` as a query parameter, along with the user input.
+
+`conversationId` is then used by `advisorSpec` to attach `CONVERSATION_ID` when using `chatClient`.
+
+Below is the code snippet showing how this is implemented on the agent side:
+
+```java
+
+@GetMapping("/agent")
+public String generation(@RequestParam String userInput, @RequestParam UUID conversationId) {
+    return chatClient.prompt()
+            .user(userInput)
+            .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
+            .call()
+            .content();
+}
+```
 
 ## Architecture
 
