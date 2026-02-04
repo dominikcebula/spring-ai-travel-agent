@@ -262,7 +262,22 @@ The below diagram shows the architecture of the application updated with MongoDB
 
 ## Summary
 
-TBD
+In this article, I demonstrated how to implement persistent and isolated chat history for an AI travel agent using
+Spring AI. I explained why chat history is essential for conversational AI applications - LLMs are stateless by default,
+and without explicit context, they cannot maintain conversation context or remember user preferences.
+
+I showed how to persist chat history using MongoDB with Spring AI's `MongoChatMemoryRepository`, which ensures that
+conversation data survives application restarts and can be shared across multiple service instances. The implementation
+required adding the `spring-ai-starter-model-chat-memory-repository-mongodb` dependency and configuring MongoDB via
+Docker Compose.
+
+I also covered how to implement conversation isolation by using a unique `conversationId` (UUID) per user session. On
+the frontend, this ID is stored in local storage and passed with each request. On the agent side, it is used with
+`ChatMemory.CONVERSATION_ID` to ensure each user's conversation remains separate and private.
+
+With these two mechanisms in place - persistent storage and conversation isolation – the AI travel agent can maintain
+context across interactions, remember user preferences within a session, and provide a coherent, personalized experience
+for each user.
 
 ## References
 
