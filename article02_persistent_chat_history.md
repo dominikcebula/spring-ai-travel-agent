@@ -236,6 +236,9 @@ async function callAgent(userInput: string): Promise<string> {
 }
 ```
 
+Full source code of the above snippet is available on
+GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent-chat-ui/src/App.tsx
+
 On the agent side, I receive `conversationId` as a query parameter along with the user input.
 
 The `conversationId` is then used by `advisorSpec` to set the `CONVERSATION_ID` when using `chatClient`.
@@ -253,6 +256,9 @@ public String generation(@RequestParam String userInput, @RequestParam UUID conv
             .content();
 }
 ```
+
+Full source code of the above snippet is available on
+GitHub: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/java/com/dominikcebula/spring/ai/agent/AgentController.java
 
 ## Architecture
 
