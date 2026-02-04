@@ -256,7 +256,9 @@ public String generation(@RequestParam String userInput, @RequestParam UUID conv
 
 ## Architecture
 
-TBD
+The below diagram shows the architecture of the application updated with MongoDB used to persist chat history.
+
+![architecture.drawio.png](docs/article02_persistent_chat_history/architecture.drawio.png)
 
 ## Summary
 
