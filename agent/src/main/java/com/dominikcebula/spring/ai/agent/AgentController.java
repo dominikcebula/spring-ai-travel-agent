@@ -1,5 +1,6 @@
 package com.dominikcebula.spring.ai.agent;
 
+import com.dominikcebula.spring.ai.agent.memory.MemoryRecorderAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -16,10 +17,13 @@ import java.util.UUID;
 public class AgentController {
     private final ChatClient chatClient;
 
-    public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory) {
+    public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory, MemoryRecorderAdvisor memoryRecorderAdvisor) {
         this.chatClient = chatClientBuilder
                 .defaultToolCallbacks(toolCallbackProvider)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        memoryRecorderAdvisor
+                )
                 .defaultSystem(
                         """
                                 You are a helpful travel assistant who can help with booking flights, hotels, and rental cars.
