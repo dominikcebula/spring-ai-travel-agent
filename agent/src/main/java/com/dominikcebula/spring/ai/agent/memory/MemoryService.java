@@ -4,7 +4,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,8 +18,8 @@ public class MemoryService {
         this.vectorStore = vectorStore;
     }
 
-    public void storeMemory(String conversationId, String content, MemoryType memoryType) {
-        Memory memory = new Memory(UUID.randomUUID(), conversationId, content, memoryType, ZonedDateTime.now());
+    public void storeMemory(UUID conversationId, String content, MemoryType memoryType) {
+        Memory memory = new Memory(UUID.randomUUID(), conversationId, content, memoryType, LocalDateTime.now());
 
         Document document = new Document(
                 memory.id().toString(),

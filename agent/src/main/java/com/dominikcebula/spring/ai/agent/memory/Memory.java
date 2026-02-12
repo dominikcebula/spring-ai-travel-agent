@@ -1,14 +1,14 @@
 package com.dominikcebula.spring.ai.agent.memory;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record Memory(
         UUID id,
-        String conversationId,
+        UUID conversationId,
         String content,
         MemoryType memoryType,
-        ZonedDateTime createdAt
+        LocalDateTime createdAt
 ) {
 }
 
