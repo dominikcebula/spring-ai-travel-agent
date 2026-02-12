@@ -50,28 +50,25 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
 
     private void extractAndStoreMemories(ChatClientRequest chatClientRequest, ChatClientResponse chatClientResponse) {
         String userPrompt = chatClientRequest.prompt().getUserMessage().getText();
-        Optional<String> chatResponse = getChatResponse(chatClientResponse);
+        String chatResponse = getChatResponse(chatClientResponse);
 
-        if (chatResponse.isPresent()) {
-            MemoryExtractionResult memoryExtractionResult = extractMemories(userPrompt, chatResponse);
+        MemoryExtractionResult memoryExtractionResult = extractMemories(userPrompt, chatResponse);
 
-            storeExtractedMemories(chatClientRequest, memoryExtractionResult);
-        } else {
-            LOGGER.warn("No chat response found in the chat client response. Skipping memory extraction.");
-        }
+        storeExtractedMemories(chatClientRequest, memoryExtractionResult);
     }
 
     @NonNull
-    private Optional<String> getChatResponse(ChatClientResponse chatClientResponse) {
+    private String getChatResponse(ChatClientResponse chatClientResponse) {
         return Optional.ofNullable(chatClientResponse.chatResponse())
                 .map(response -> response.getResults().stream()
                         .map(Generation::getOutput)
                         .map(AssistantMessage::getText)
-                        .collect(Collectors.joining()));
+                        .collect(Collectors.joining()))
+                .orElseThrow();
     }
 
     @NonNull
-    private MemoryExtractionResult extractMemories(String userPrompt, Optional<String> chatResponse) {
+    private MemoryExtractionResult extractMemories(String userPrompt, String chatResponse) {
         String memoryExtractionUserMessage = getMemoryExtractionUserMessage(userPrompt, chatResponse);
         String memoryExtractionSystemMessage = getMemoryExtractionSystemMessage();
 
@@ -94,7 +91,7 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
     }
 
     @NonNull
-    private String getMemoryExtractionUserMessage(String userPrompt, Optional<String> chatResponse) {
+    private String getMemoryExtractionUserMessage(String userPrompt, String chatResponse) {
         return """
                 USER SAID:
                 """ +
@@ -103,7 +100,7 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
                 
                 ASSISTANT REPLIED:
                 """ +
-                chatResponse.get()
+                chatResponse
                 + """
                 
                 Extract up to 5 memories.
