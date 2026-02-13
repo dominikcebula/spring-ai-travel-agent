@@ -6,7 +6,6 @@ import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
-import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -20,8 +19,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.dominikcebula.spring.ai.agent.memory.utils.ChatClientRequestUtils.getConversationId;
 
 @Component
 public class MemoryRecorderAdvisor implements CallAdvisor {
@@ -132,11 +132,6 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
                 """.trim();
     }
 
-    @NonNull
-    private UUID getConversationId(ChatClientRequest chatClientRequest) {
-        return (UUID) Optional.of(chatClientRequest.context().get(ChatMemory.CONVERSATION_ID)).orElseThrow();
-    }
-
     @Override
     public String getName() {
         return getClass().getSimpleName();
@@ -144,7 +139,7 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
 
     @Override
     public int getOrder() {
-        return HIGHEST_PRECEDENCE + 50;
+        return HIGHEST_PRECEDENCE + 60;
     }
 
     private record MemoryCandidate(String content, MemoryType memoryType) {

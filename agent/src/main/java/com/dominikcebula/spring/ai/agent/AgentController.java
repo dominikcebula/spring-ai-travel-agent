@@ -1,6 +1,7 @@
 package com.dominikcebula.spring.ai.agent;
 
 import com.dominikcebula.spring.ai.agent.memory.MemoryRecorderAdvisor;
+import com.dominikcebula.spring.ai.agent.memory.MemoryRetrievalAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -12,17 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
+
 @RestController
 @RequestMapping("/api/v1")
 public class AgentController {
     private final ChatClient chatClient;
 
-    public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory, MemoryRecorderAdvisor memoryRecorderAdvisor) {
+    public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory, MemoryRecorderAdvisor memoryRecorderAdvisor, MemoryRetrievalAdvisor memoryRetrievalAdvisor) {
         this.chatClient = chatClientBuilder
                 .defaultToolCallbacks(toolCallbackProvider)
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                        memoryRecorderAdvisor
+                        memoryRecorderAdvisor,
+                        memoryRetrievalAdvisor
                 )
                 .defaultSystem(
                         """
@@ -46,7 +50,7 @@ public class AgentController {
     public String generation(@RequestParam String userInput, @RequestParam UUID conversationId) {
         return chatClient.prompt()
                 .user(userInput)
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
+                .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, conversationId))
                 .call()
                 .content();
     }
