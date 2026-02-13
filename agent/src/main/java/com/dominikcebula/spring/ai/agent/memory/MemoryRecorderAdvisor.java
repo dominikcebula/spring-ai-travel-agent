@@ -39,11 +39,7 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
     public ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
         ChatClientResponse chatClientResponse = callAdvisorChain.nextCall(chatClientRequest);
 
-        try {
-            extractAndStoreMemories(chatClientRequest, chatClientResponse);
-        } catch (Exception e) {
-            LOGGER.warn("Error occurred while extracting memories from the conversation", e);
-        }
+        extractAndStoreMemories(chatClientRequest, chatClientResponse);
 
         return chatClientResponse;
     }
