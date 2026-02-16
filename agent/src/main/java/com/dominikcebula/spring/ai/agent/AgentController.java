@@ -41,6 +41,14 @@ public class AgentController {
                                 Avoid unnecessary verbosity while ensuring all critical booking information is communicated.
                                 Your goal is to act as a reliable, tool-driven travel booking assistant that helps users complete their travel arrangements with confidence and clarity.
                                 
+                                You have access to the following types of memory:
+                                1. Short-term memory: Chat history, the current conversation thread
+                                2. Long-term memory:
+                                   A. EPISODIC: Personal experiences and user-specific preferences
+                                      Examples: "User prefers economy cars", "User prefers budget hotels"
+                                   B. SEMANTIC: General domain knowledge and facts
+                                      Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes"
+                                
                                 If the user asks for information that is not related to travel bookings, respond politely that you can only assist with travel bookings.
                                 """)
                 .build();

@@ -24,9 +24,9 @@ spring:
       mongodb:
         initialize-schema: true
         collection-name: ai_vector_store
-        index-name: ai_vector_index
-        path-name: ai_embedding
-        metadata-fields-to-filter: author,year
+        index-name: vector_index
+        path-name: embedding
+        metadata-fields-to-filter: conversationId,memoryType,createdAt
   data:
     mongodb:
       uri: mongodb://localhost:27017/

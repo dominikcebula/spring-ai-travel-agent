@@ -1,7 +1,5 @@
 package com.dominikcebula.spring.ai.agent.memory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
@@ -25,8 +23,6 @@ import static com.dominikcebula.spring.ai.agent.memory.utils.ChatClientRequestUt
 
 @Component
 public class MemoryRecorderAdvisor implements CallAdvisor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemoryRecorderAdvisor.class);
-
     private final MemoryService memoryService;
     private final ChatModel chatModel;
 
@@ -83,7 +79,8 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
 
     private void storeExtractedMemories(ChatClientRequest chatClientRequest, MemoryExtractionResult memoryExtractionResult) {
         memoryExtractionResult.memories()
-                .forEach(memory -> memoryService.storeMemory(getConversationId(chatClientRequest), memory.content(), memory.memoryType()));
+                .forEach(memory -> memoryService.storeMemory(
+                        getConversationId(chatClientRequest), memory.content(), memory.memoryType()));
     }
 
     @NonNull
@@ -99,6 +96,7 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
                 chatResponse
                 + """
                 
+                YOUR TASK:
                 Extract up to 5 memories.
                 """;
     }

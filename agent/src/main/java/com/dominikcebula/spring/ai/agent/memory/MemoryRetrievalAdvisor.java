@@ -26,16 +26,19 @@ public class MemoryRetrievalAdvisor implements CallAdvisor {
     public ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
         String userPrompt = chatClientRequest.prompt().getUserMessage().getText();
 
-        List<Memory> memories = memoryService.retrieveMemory(getConversationId(chatClientRequest), userPrompt, MEMORY_LIMIT_5_MEMORIES, SIMILARITY_90_PRC);
+        List<Memory> memories = memoryService.retrieveMemory(
+                getConversationId(chatClientRequest),
+                userPrompt, MEMORY_LIMIT_5_MEMORIES, SIMILARITY_90_PRC);
 
         if (!memories.isEmpty()) {
             String memory = """
-                    Use the MEMORY below if relevant. Keep answers factual and concise.
+                    Use the Long-term MEMORY below if relevant. Keep answers factual and concise.
                     
                     ----- MEMORY -----
                     """ +
                     IntStream.range(0, memories.size())
-                            .mapToObj(i -> String.format("%d. %s", i + 1, memories.get(i).content()))
+                            .mapToObj(idx -> String.format("%d. Memory Type: %s, Memory Content: %s",
+                                    idx + 1, memories.get(idx).memoryType(), memories.get(idx).content()))
                             .reduce("", (a, b) -> a + b + "\n")
                     + """
                     ------------------
