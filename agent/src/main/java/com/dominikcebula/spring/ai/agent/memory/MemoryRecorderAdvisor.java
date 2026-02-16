@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.dominikcebula.spring.ai.agent.memory.MemoryDefinitions.SIMILARITY_90_PRC;
 import static com.dominikcebula.spring.ai.agent.memory.utils.ChatClientRequestUtils.getConversationId;
 
 @Component
@@ -45,6 +46,8 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
         String chatResponse = getChatResponse(chatClientResponse);
 
         MemoryExtractionResult memoryExtractionResult = extractMemories(userPrompt, chatResponse);
+
+        memoryExtractionResult = filterOutSimilarMemories(chatClientRequest, memoryExtractionResult);
 
         storeExtractedMemories(chatClientRequest, memoryExtractionResult);
     }
@@ -75,6 +78,14 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
                 .collect(Collectors.joining());
 
         return EXTRACTION_CONVERTER.convert(extractedMemories);
+    }
+
+    private MemoryExtractionResult filterOutSimilarMemories(ChatClientRequest chatClientRequest, MemoryExtractionResult memoryExtractionResult) {
+        return new MemoryExtractionResult(
+                memoryExtractionResult.memories().stream()
+                        .filter(memory -> !memoryService.similarMemoryExists(
+                                getConversationId(chatClientRequest), memory.content(), memory.memoryType(), SIMILARITY_90_PRC))
+                        .toList());
     }
 
     private void storeExtractedMemories(ChatClientRequest chatClientRequest, MemoryExtractionResult memoryExtractionResult) {

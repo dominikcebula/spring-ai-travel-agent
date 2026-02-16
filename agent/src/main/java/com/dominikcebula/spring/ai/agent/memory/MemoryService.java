@@ -44,6 +44,25 @@ public class MemoryService {
         vectorStore.add(singletonList(document));
     }
 
+    public boolean similarMemoryExists(UUID conversationId, String content, MemoryType memoryType, float distanceThreshold) {
+        FilterExpressionBuilder filterExpressionBuilder = new FilterExpressionBuilder();
+
+        Filter.Expression filterExpression = filterExpressionBuilder.and(
+                filterExpressionBuilder.eq(META_CONVERSATION_ID, conversationId.toString()),
+                filterExpressionBuilder.eq(META_MEMORY_TYPE, memoryType.name())
+        ).build();
+
+        List<Document> foundMemories = vectorStore.similaritySearch(
+                SearchRequest.builder()
+                        .query(content)
+                        .topK(1)
+                        .filterExpression(filterExpression)
+                        .similarityThreshold(distanceThreshold)
+                        .build());
+
+        return !foundMemories.isEmpty();
+    }
+
     public List<Memory> retrieveMemory(UUID conversationId, String userPrompt, int limit, float distanceThreshold) {
         FilterExpressionBuilder filterExpressionBuilder = new FilterExpressionBuilder();
 

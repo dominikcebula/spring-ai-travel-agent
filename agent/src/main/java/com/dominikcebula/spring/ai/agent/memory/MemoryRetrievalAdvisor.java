@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.dominikcebula.spring.ai.agent.memory.MemoryDefinitions.MEMORY_LIMIT_5_MEMORIES;
+import static com.dominikcebula.spring.ai.agent.memory.MemoryDefinitions.SIMILARITY_90_PRC;
 import static com.dominikcebula.spring.ai.agent.memory.utils.ChatClientRequestUtils.getConversationId;
 
 @Component
 public class MemoryRetrievalAdvisor implements CallAdvisor {
-    private static final int MEMORY_LIMIT_5_MEMORIES = 5;
-    private static final float SIMILARITY_90_PRC = 0.9f;
-
     private final MemoryService memoryService;
 
     public MemoryRetrievalAdvisor(MemoryService memoryService) {
