@@ -26,7 +26,7 @@ TBD
 
 ### Vector Storage
 
-TBD
+TBD + props + pom.xml changes
 
 ### Embedding Model
 
