@@ -24,6 +24,14 @@ See also the full [article](article.md) describing the project.
 - **Microservices Architecture** — Loosely coupled services with clean API contracts
 - **Modern React UI** — travel-themed chat interface built with react-chatbotify
 
+## 📝 Article
+
+Below is the list of articles created for this project:
+
+- [AI Travel Agent using Spring AI](article.md)
+- [Persistent and Isolated Chat History using Spring AI](article02_persistent_chat_history.md)
+- [AI Agent Long-Term Memory (LTM) using Spring AI](article03_long_term_memory.md)
+
 ## 🛠️ Tech Stack
 
 | Layer    | Technology                                     |
