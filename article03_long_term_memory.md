@@ -4,7 +4,7 @@
 
 ## Introduction
 
-In this article I will show how I implemented long-term memory (LTM) in AI agents using Spring AI and MongoDB.
+In this article I will show how I implemented long-term memory (LTM) in AI agent using Spring AI and MongoDB.
 
 This article builds on the previous articles, [AI Travel Agent using Spring AI](article.md)
 and [Persistent and Isolated Chat History using Spring AI](article02_persistent_chat_history.md), if you haven't read
@@ -140,11 +140,30 @@ As a result, Long-Term Memory (LTM) entry is extracted by LLM and stored with th
 
 ## How will AI agent use long-term memory?
 
-TBD
+Agent will search for relevant long-term memory entries using semantic search before answering questions, if entries are
+found, they will be added to the context of the prompt.
+
+Here is the example of a prompt with long-term memories extracted:
+
+```text
+Use the Long-term MEMORY below if relevant. Keep answers factual and concise.
+
+----- MEMORY -----
+1. Memory Type: EPISODIC, Memory Content: User prefers economy cars when renting a car
+2. Memory Type: EPISODIC, Memory Content: User prefers to travel business class whenever available
+3. Memory Type: EPISODIC, Memory Content: User prefers to avoid hotel rooms close to the elevator
+------------------
+```
 
 ## Types of long-term memory
 
-TBD
+I have implemented two types of long-term memory:
+
+EPISODIC: Personal experiences and user-specific preferences
+Examples: "User prefers economy cars", "User prefers budget hotels".
+
+SEMANTIC: General domain knowledge and facts
+Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes".
 
 ## How to implement long-term memory in AI agents?
 
