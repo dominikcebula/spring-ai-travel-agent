@@ -53,7 +53,90 @@ entry similar to the currently extracted information, and if not, it creates a n
 
 ## Prompting for long-term memory extraction
 
-TBD
+Agent will use LLM to extract information from the user's messages. Below is an example prompt for extracting long-term
+memory from a dialog with the user:
+
+```text
+USER SAID:
+My preference are economy cars when renting a car.
+
+ASSISTANT REPLIED:
+Thank you for letting me know! I've noted that you prefer economy cars when renting a car.
+I'll keep this preference in mind for any future car rental searches or bookings
+to help you find the most suitable options.
+
+YOUR TASK:
+Extract up to 5 memories.
+```
+
+Here is the system prompt for extracting long-term memory:
+
+```text
+Extract long-term memories from a dialog with the user.
+
+A memory is either:
+
+1. EPISODIC: Personal experiences and user-specific preferences
+   Examples: "User prefers economy cars", "User prefers budget hotels"
+
+2. SEMANTIC: General domain knowledge and facts
+   Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes"
+
+Limit extraction to clear, factual information. Do not infer information that was not explicitly stated.
+Return an empty array, if no memories can be extracted.
+
+The instance must conform to this JSON schema:
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "memories" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "string"
+          },
+          "memoryType" : {
+            "type" : "string",
+            "enum" : [ "EPISODIC", "SEMANTIC" ]
+          }
+        },
+        "required" : [ "content", "memoryType" ],
+        "additionalProperties" : false
+      }
+    }
+  },
+  "required" : [ "memories" ],
+  "additionalProperties" : false
+}
+
+Do not include code fences, schema, or properties. Output a single-line JSON object.
+```
+
+As a result, Long-Term Memory (LTM) entry is extracted by LLM and stored with the vector created by embedding model:
+
+```text
+  {
+    _id: 'd6440f1a-15d6-4253-a748-f5b68e5013bc',
+    content: 'User prefers economy cars when renting a car',
+    metadata: {
+      createdAt: ISODate('2026-02-17T20:45:18.584Z'),
+      memoryType: 'EPISODIC',
+      conversationId: '859bdab7-deef-4cef-90a6-3addda92c072'
+    },
+    embedding: [
+            -0.034637451171875,  -0.0021152496337890625,       0.062103271484375,
+            0.0277252197265625,        -0.0360107421875, -0.00009626150131225586,
+          0.002040863037109375,     -0.0180816650390625,    0.005931854248046875,
+          ...
+          -0.0011997222900390625,     -0.0261383056640625,        -0.017456054687
+    ],
+    _class: 'org.springframework.ai.vectorstore.mongodb.atlas.MongoDBAtlasVectorStore$MongoDBDocument'
+  }
+]
+```
 
 ## How will AI agent use long-term memory?
 
