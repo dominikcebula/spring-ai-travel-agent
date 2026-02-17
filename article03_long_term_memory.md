@@ -1,6 +1,6 @@
 # AI Agent Long-Term Memory (LTM) using Spring AI
 
-LOGO - TBD
+![logo_article03_long_term_memory.png](docs/article03_long_term_memory/logo_article03_long_term_memory.png)
 
 ## Introduction
 
@@ -50,6 +50,10 @@ previous conversations without having to include all past messages in the prompt
 
 When the agent needs to store information in long-term memory, it checks if the vector database already contains an
 entry similar to the currently extracted information, and if not, it creates a new entry.
+
+## Prompting for long-term memory extraction
+
+TBD
 
 ## How will AI agent use long-term memory?
 
