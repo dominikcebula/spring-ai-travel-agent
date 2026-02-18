@@ -171,6 +171,8 @@ Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes".
 
 TBD
 
+![agent_long_term_memory.png](docs/article03_long_term_memory/agent_long_term_memory.png)
+
 ### Vector Storage
 
 TBD + props + pom.xml changes

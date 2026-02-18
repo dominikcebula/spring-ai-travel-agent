@@ -1,0 +1,46 @@
+@startuml
+
+autonumber
+
+participant AgentController
+participant MemoryRetrievalAdvisor
+participant MemoryRecorderAdvisor
+participant MemoryService
+participant VectorStore
+participant ChatModel
+
+group Memory Retrieval
+    AgentController -> MemoryRetrievalAdvisor: adviseCall
+    MemoryRetrievalAdvisor -> MemoryService : retrieveMemory
+    MemoryService -> VectorStore : similaritySearch
+    VectorStore -> MemoryService : documents
+    MemoryService -> MemoryRetrievalAdvisor : memories
+    MemoryRetrievalAdvisor -> AgentController : mutatedPromptWithMemories
+end
+
+group Agent Response Generation
+    AgentController -> ChatModel : call
+    ChatModel -> AgentController : response
+end
+
+group Memory Recording
+    AgentController -> MemoryRecorderAdvisor : adviseCall
+    group Memory Extraction
+        MemoryRecorderAdvisor -> ChatModel : extractMemories
+        ChatModel -> MemoryRecorderAdvisor : memoryExtractionResponse
+        MemoryRecorderAdvisor -> MemoryRecorderAdvisor : parseMemoryExtractionResponse
+    end
+    group Memory Storage
+        MemoryRecorderAdvisor -> MemoryService : similarMemoryExists
+        MemoryService -> VectorStore : similaritySearch
+        VectorStore -> MemoryService : at least one document found?
+        MemoryService -> MemoryRecorderAdvisor : similarMemoryExistsResponse
+        alt No similar memory exists
+            MemoryRecorderAdvisor -> MemoryService : storeMemory
+        else Similar memory exists
+            note right of MemoryRecorderAdvisor : Do not store the new memory,\nsimilar memory already exists
+        end
+    end
+end
+
+@enduml
