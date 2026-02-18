@@ -169,7 +169,8 @@ Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes".
 
 ### High-Level Architecture
 
-TBD
+The below diagram shows operations performed by the agent when processing a user request with added long-term memory
+support.
 
 ![agent_long_term_memory.png](docs/article03_long_term_memory/agent_long_term_memory.png)
 
