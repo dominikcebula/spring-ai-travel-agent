@@ -10,6 +10,8 @@ This article builds on the previous articles, [AI Travel Agent using Spring AI](
 and [Persistent and Isolated Chat History using Spring AI](article02_persistent_chat_history.md), if you haven't read
 them yet, I recommend getting familiar with them as well.
 
+The full source code for this article can be found on GitHub: https://github.com/dominikcebula/spring-ai-travel-agent
+
 ## Why do we need long-term memory (LTM)?
 
 Large Language Models (LLMs) are stateless by default, each prompt is processed independently. This means that for the
@@ -172,23 +174,218 @@ Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes".
 The below diagram shows operations performed by the agent when processing a user request with added long-term memory
 support.
 
+The main additions are Memory Retrieval before answering the user question and Memory Recording after processing the
+user request.
+
 ![agent_long_term_memory.png](docs/article03_long_term_memory/agent_long_term_memory.png)
 
 ### Vector Storage
 
-TBD + props + pom.xml changes
+MongoDB Atlas is used as a vector database that stores embeddings for each long-term memory entry, based on which they
+can be retrieved using semantic search.
+
+`application.yml` was changed as follows to configure MongoDB Atlas as a vector database:
+
+```yaml
+spring:
+  ai:
+    vectorstore:
+      mongodb:
+        initialize-schema: true
+        collection-name: ai_vector_store
+        index-name: vector_index
+        path-name: embedding
+        metadata-fields-to-filter: conversationId,memoryType,createdAt
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/
+      database: travel-agent
+```
+
+The full source code of the `application.yml` file can be found
+under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/resources/application.yml
+
+Additionally `docker-compose.yml` was changed to start MongoDB Atlas when running the application locally:
+
+```yaml
+services:
+  mongo:
+    image: 'mongodb/mongodb-atlas-local:8.0.14'
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: travel-agent
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+```
+
+The full source code of the `docker-compose.yml` file can be found
+under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/docker-compose.yaml
 
 ### Embedding Model
 
-TBD
+To create vector embeddings for each long-term memory entry `bedrock-cohere` embedding model was used. `application.yml`
+was changed in the following way:
+
+```yaml
+spring:
+  ai:
+    model:
+      embedding: bedrock-cohere
+```
 
 ### Recording Memories
 
-TBD
+Memories are recorded by `MemoryRecorderAdvisor` based on the user's prompt and agent response. LLM is called to extract
+long-term memory from the prompt, and then the entry is stored in the vector database.
+
+See the below code snippet showing how `MemoryRecorderAdvisor` was implemented:
+
+```java
+
+@Component
+public class MemoryRecorderAdvisor implements CallAdvisor {
+  private final MemoryService memoryService;
+  private final ChatModel chatModel;
+
+  public MemoryRecorderAdvisor(MemoryService memoryService, ChatModel chatModel) {
+    this.memoryService = memoryService;
+    this.chatModel = chatModel;
+  }
+
+  @Override
+  public ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
+    ChatClientResponse chatClientResponse = callAdvisorChain.nextCall(chatClientRequest);
+
+    extractAndStoreMemories(chatClientRequest, chatClientResponse);
+
+    return chatClientResponse;
+  }
+
+  private void extractAndStoreMemories(ChatClientRequest chatClientRequest, ChatClientResponse chatClientResponse) {
+    String userPrompt = chatClientRequest.prompt().getUserMessage().getText();
+    String chatResponse = getChatResponse(chatClientResponse);
+
+    MemoryExtractionResult memoryExtractionResult = extractMemories(userPrompt, chatResponse);
+
+    memoryExtractionResult = filterOutSimilarMemories(chatClientRequest, memoryExtractionResult);
+
+    storeExtractedMemories(chatClientRequest, memoryExtractionResult);
+  }
+
+  @NonNull
+  private String getChatResponse(ChatClientResponse chatClientResponse) {
+    return Optional.ofNullable(chatClientResponse.chatResponse())
+            .map(response -> response.getResults().stream()
+                    .map(Generation::getOutput)
+                    .map(AssistantMessage::getText)
+                    .collect(Collectors.joining()))
+            .orElseThrow();
+  }
+
+  @NonNull
+  private MemoryExtractionResult extractMemories(String userPrompt, String chatResponse) {
+    String memoryExtractionUserMessage = getMemoryExtractionUserMessage(userPrompt, chatResponse);
+    String memoryExtractionSystemMessage = getMemoryExtractionSystemMessage();
+
+    ChatResponse memoryExtractionResponse = chatModel.call(new Prompt(List.of(
+            new UserMessage(memoryExtractionUserMessage),
+            new SystemMessage(memoryExtractionSystemMessage)
+    )));
+
+    String extractedMemories = memoryExtractionResponse.getResults().stream()
+            .map(Generation::getOutput)
+            .map(AssistantMessage::getText)
+            .collect(Collectors.joining());
+
+    return EXTRACTION_CONVERTER.convert(extractedMemories);
+  }
+
+  private MemoryExtractionResult filterOutSimilarMemories(ChatClientRequest chatClientRequest, MemoryExtractionResult memoryExtractionResult) {
+    return new MemoryExtractionResult(
+            memoryExtractionResult.memories().stream()
+                    .filter(memory -> !memoryService.similarMemoryExists(
+                            getConversationId(chatClientRequest), memory.content(), memory.memoryType(), SIMILARITY_90_PRC))
+                    .toList());
+  }
+
+  private void storeExtractedMemories(ChatClientRequest chatClientRequest, MemoryExtractionResult memoryExtractionResult) {
+    memoryExtractionResult.memories()
+            .forEach(memory -> memoryService.storeMemory(
+                    getConversationId(chatClientRequest), memory.content(), memory.memoryType()));
+  }
+
+  @NonNull
+  private String getMemoryExtractionUserMessage(String userPrompt, String chatResponse) {
+    return """
+            USER SAID:
+            """ +
+            userPrompt
+            + """
+            
+            ASSISTANT REPLIED:
+            """ +
+            chatResponse
+            + """
+            
+            YOUR TASK:
+            Extract up to 5 memories.
+            """;
+  }
+
+  @NonNull
+  private String getMemoryExtractionSystemMessage() {
+    return """
+            Extract long-term memories from a dialog with the user.
+            
+            A memory is either:
+            
+            1. EPISODIC: Personal experiences and user-specific preferences
+               Examples: "User prefers economy cars", "User prefers budget hotels"
+            
+            2. SEMANTIC: General domain knowledge and facts
+               Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes"
+            
+            Limit extraction to clear, factual information. Do not infer information that was not explicitly stated.
+            Return an empty array, if no memories can be extracted.
+            
+            The instance must conform to this JSON schema:
+            """ +
+            EXTRACTION_CONVERTER.getJsonSchema()
+            + """
+            
+                Do not include code fences, schema, or properties. Output a single-line JSON object.
+            """.trim();
+  }
+
+  @Override
+  public String getName() {
+    return getClass().getSimpleName();
+  }
+
+  @Override
+  public int getOrder() {
+    return HIGHEST_PRECEDENCE + 60;
+  }
+
+  private record MemoryCandidate(String content, MemoryType memoryType) {
+  }
+
+  private record MemoryExtractionResult(List<MemoryCandidate> memories) {
+  }
+
+  private static final BeanOutputConverter<MemoryExtractionResult> EXTRACTION_CONVERTER = new BeanOutputConverter<>(MemoryExtractionResult.class);
+}
+```
+
+You can also look at the full source code of the `MemoryRecorderAdvisor` class under:
+https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/java/com/dominikcebula/spring/ai/agent/memory/MemoryRecorderAdvisor.java
 
 ### Retrieving Memories
 
-TBD
+Relevant memories are retrieved by `MemoryRetrievalAdvisor` and added to the prompt before calling LLM. This way LLM
+will have access to relevant information about the user preferences and facts.
 
 ### Agent System Prompt
 
