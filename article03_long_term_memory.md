@@ -451,9 +451,67 @@ public class MemoryRetrievalAdvisor implements CallAdvisor {
 }
 ```
 
+The full source code of the `MemoryRetrievalAdvisor` class can be found
+under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/java/com/dominikcebula/spring/ai/agent/memory/MemoryRetrievalAdvisor.java
+
 ### Agent System Prompt
 
-TBD
+System prompt for the agent was updated to include instructions on how to use long-term memory:
+
+```java
+
+@RestController
+@RequestMapping("/api/v1")
+public class AgentController {
+  private final ChatClient chatClient;
+
+  public AgentController(ChatClient.Builder chatClientBuilder, ToolCallbackProvider toolCallbackProvider, ChatMemory chatMemory, MemoryRecorderAdvisor memoryRecorderAdvisor, MemoryRetrievalAdvisor memoryRetrievalAdvisor) {
+    this.chatClient = chatClientBuilder
+            .defaultToolCallbacks(toolCallbackProvider)
+            .defaultAdvisors(
+                    MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                    memoryRecorderAdvisor,
+                    memoryRetrievalAdvisor
+            )
+            .defaultSystem(
+                    """
+                            You are a helpful travel assistant who can help with booking flights, hotels, and rental cars.
+                            Your primary responsibility is to help users search for, compare, and book flights, hotels, and rental cars efficiently and accurately.
+                            
+                            Use provided Flight Booking Tools, Hotels Booking Tools, and Cars Rental Tools to assist the user with their travel needs.
+                            Always use the tools available to get information and perform actions on behalf of the user.
+                            
+                            Be professional, concise, and friendly.
+                            Use clear, structured responses that are easy to scan.
+                            Avoid unnecessary verbosity while ensuring all critical booking information is communicated.
+                            Your goal is to act as a reliable, tool-driven travel booking assistant that helps users complete their travel arrangements with confidence and clarity.
+                            
+                            You have access to the following types of memory:
+                            1. Short-term memory: Chat history, the current conversation thread
+                            2. Long-term memory:
+                               A. EPISODIC: Personal experiences and user-specific preferences
+                                  Examples: "User prefers economy cars", "User prefers budget hotels"
+                               B. SEMANTIC: General domain knowledge and facts
+                                  Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes"
+                            
+                            If the user asks for information that is not related to travel bookings, respond politely that you can only assist with travel bookings.
+                            """)
+            .build();
+  }
+
+  @GetMapping("/agent")
+  public String generation(@RequestParam String userInput, @RequestParam UUID conversationId) {
+    return chatClient.prompt()
+            .user(userInput)
+            .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, conversationId))
+            .call()
+            .content();
+  }
+}
+```
+
+The full source code of the `AgentController` class can be found
+under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/java/com/dominikcebula/spring/ai/agent/AgentController.java
 
 ### Memory Service
 
