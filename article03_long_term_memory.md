@@ -22,11 +22,20 @@ scale well.
 
 Chat history usually contains the last 10–20 messages. Extending it with more messages increases costs due to higher
 token consumption and may also cause issues with the maximum token limit. This is because chat history adds all of
-those messages to each user prompt. From the user's perspective, it looks like a single message, but under the hood,
-all previous messages are appended as well. So what appears to be a short message is actually the user’s message plus
-the last 20 messages.
+those messages to each user prompt. From the user's perspective, interacting with agent that uses short-term memory,
+looks like agent is processing only a single message, but under the hood, all previous messages from chat history are
+appended as well. So what appears to be a short message is actually the user’s message plus the last 20 messages, which
+increases the token consumption.
 
-The solution is to use long-term memory (LTM) to store important information about user preferences and relevant facts.
+The solution to scale agent memory in a cost-efficient way is to use long-term memory (LTM) on top of short-term
+memory (STM).
+
+In such a mode long-term memory (LTM) is used to store important information about user preferences and relevant facts,
+while chat history (short-term memory) is used to provide recent context (last 20 messages).
+
+That way agent can process the user's prompt taking into account both recent conversation context as well as user
+preferences and relevant facts from previous conversations, even if user preferences and facts were communicated beyond
+a chat history window (usually last 20 messages).
 
 ## How does long-term memory work?
 
