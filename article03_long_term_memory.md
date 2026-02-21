@@ -4,58 +4,53 @@
 
 ## Introduction
 
-In this article I will show how I implemented long-term memory (LTM) in AI agent using Spring AI and MongoDB.
+In this article, I will show how I implemented long-term memory (LTM) in an AI agent using Spring AI and MongoDB.
 
 This article builds on the previous articles, [AI Travel Agent using Spring AI](article.md)
-and [Persistent and Isolated Chat History using Spring AI](article02_persistent_chat_history.md), if you haven't read
-them yet, I recommend getting familiar with them as well.
+and [Persistent and Isolated Chat History using Spring AI](article02_persistent_chat_history.md). If you haven't read
+them yet, I recommend reviewing them first to better understand the context.
 
 The full source code for this article can be found on GitHub: https://github.com/dominikcebula/spring-ai-travel-agent
 
 ## Why do we need long-term memory (LTM)?
 
 Large Language Models (LLMs) are stateless by default, each prompt is processed independently. This means that for the
-agent to understand the context, it needs to be provided with each request to Large Language Models (LLMs).
+agent to understand the context, it must be included in every request sent to the LLM.
 
-One of the solutions is to use Chat History (Short-Term Memory). The challenge with this approach is that it does not
-scale.
+One common solution is to use chat history (short-term memory). The challenge with this approach is that it does not
+scale well.
 
-Chat History usually can contain 10–20 last messages. Extending it with more messages will lead to increased cost due to
-high tokens consumption and will also cause challenges with hitting the max token limit. This is because Chat History
-adds all of those messages to each user prompt, so from the user perspective it looks like only a single message, but
-what happens under the hood is that all previous messages are added as well. So what looks like a short message from the
-user point of view is actually a user message plus all last 20 messages.
+Chat history usually contains the last 10–20 messages. Extending it with more messages increases costs due to higher
+token consumption and may also cause issues with the maximum token limit. This is because chat history adds all of
+those messages to each user prompt. From the user's perspective, it looks like a single message, but under the hood,
+all previous messages are appended as well. So what appears to be a short message is actually the user’s message plus
+the last 20 messages.
 
-At the same time Agent needs to have access to user preferences and facts from the previous conversations.
-
-The solution is to use Long-Term Memory (LTM) to store important information about the user preferences and provide
-facts.
+The solution is to use long-term memory (LTM) to store important information about user preferences and relevant facts.
 
 ## How does long-term memory work?
 
-Long-Term Memory (LTM) is a storage for information that agent should remember over time about the user.
+Long-term memory (LTM) is a storage mechanism for information that the agent should remember about the user over time.
 
-Compared to Short-Term Memory (STM), it does not contain all messages, instead information is extracted from messages
-and stored in a structured way. This allows storing much more selective and targeted information in a more compact form.
+Compared to short-term memory (STM), it does not store all messages. Instead, relevant information is extracted from
+messages and stored in a structured format. This allows for more selective and targeted storage in a compact form.
 
-Long-Term Memory (LTM) entries are extracted using Large Language Models (LLMs) and stored in a vector database. Each
-entry is associated with a vector embedding, which allows for efficient retrieval based on similarity using semantic
-search.
+Long-term memory (LTM) entries are extracted using Large Language Models (LLMs) and stored in a vector database. Each
+entry is associated with a vector embedding, enabling efficient retrieval based on semantic similarity search.
 
-Adding Long-Term Memory (LTM) means that Large Language Models (LLMs) will be used not only to answer questions, but
-also to extract information from the user's messages. Additionally, an embedding model will be used to create embeddings
-for each entry.
+Introducing long-term memory means that LLMs are used not only to answer questions but also to extract structured
+information from user messages. Additionally, an embedding model is used to generate embeddings for each memory entry.
 
-When the agent needs to access long-term memory, it can query the vector database using the current context to retrieve
-relevant entries. This way, the agent can access important information about the user preferences and facts from
-previous conversations without having to include all past messages in the prompt.
+When the agent needs to access long-term memory, it queries the vector database using the current context to retrieve
+relevant entries. This allows the agent to access important user preferences and facts from previous conversations
+without including the entire chat history in the prompt.
 
-When the agent needs to store information in long-term memory, it checks if the vector database already contains an
-entry similar to the currently extracted information, and if not, it creates a new entry.
+When storing information in long-term memory, the agent checks whether a similar entry already exists in the vector
+database. If not, it creates a new entry.
 
 ## Prompting for long-term memory extraction
 
-Agent will use LLM to extract information from the user's messages. Below is an example prompt for extracting long-term
+The agent uses an LLM to extract information from user messages. Below is an example prompt for extracting long-term
 memory from a dialog with the user:
 
 ```text
@@ -117,7 +112,8 @@ The instance must conform to this JSON schema:
 Do not include code fences, schema, or properties. Output a single-line JSON object.
 ```
 
-As a result, Long-Term Memory (LTM) entry is extracted by LLM and stored with the vector created by embedding model:
+As a result, a long-term memory (LTM) entry is extracted by the LLM and stored together with the vector created by the
+embedding model:
 
 ```text
   {
@@ -140,12 +136,12 @@ As a result, Long-Term Memory (LTM) entry is extracted by LLM and stored with th
 ]
 ```
 
-## How will AI agent use long-term memory?
+## How will the AI agent use long-term memory?
 
-Agent will search for relevant long-term memory entries using semantic search before answering questions, if entries are
-found, they will be added to the context of the prompt.
+The agent searches for relevant long-term memory entries using semantic search before answering a question. If entries
+are found, they are added to the prompt context.
 
-Here is the example of a prompt with long-term memories extracted:
+Here is an example of a prompt with extracted long-term memories:
 
 ```text
 Use the Long-term MEMORY below if relevant. Keep answers factual and concise.
@@ -159,7 +155,7 @@ Use the Long-term MEMORY below if relevant. Keep answers factual and concise.
 
 ## Types of long-term memory
 
-I have implemented two types of long-term memory:
+I implemented two types of long-term memory:
 
 EPISODIC: Personal experiences and user-specific preferences
 Examples: "User prefers economy cars", "User prefers budget hotels".
@@ -171,20 +167,20 @@ Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes".
 
 ### High-Level Architecture
 
-The below diagram shows operations performed by the agent when processing a user request with added long-term memory
-support.
+The diagram below shows the operations performed by the agent when processing a user request with long-term memory
+support enabled.
 
-The main additions are Memory Retrieval before answering the user question and Memory Recording after processing the
-user request.
+The main additions are memory retrieval before answering the user’s question and memory recording after processing the
+request.
 
 ![agent_long_term_memory.png](docs/article03_long_term_memory/agent_long_term_memory.png)
 
 ### Vector Storage
 
-MongoDB Atlas is used as a vector database that stores embeddings for each long-term memory entry, based on which they
-can be retrieved using semantic search.
+MongoDB Atlas is used as a vector database to store embeddings for each long-term memory entry. These embeddings are
+used to retrieve entries through semantic search.
 
-`application.yml` was changed as follows to configure MongoDB Atlas as a vector database:
+`application.yml` was updated as follows to configure MongoDB Atlas as a vector database:
 
 ```yaml
 spring:
@@ -205,7 +201,7 @@ spring:
 The full source code of the `application.yml` file can be found
 under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/resources/application.yml
 
-Additionally `docker-compose.yml` was changed to start MongoDB Atlas when running the application locally:
+Additionally, `docker-compose.yml` was updated to start MongoDB Atlas when running the application locally:
 
 ```yaml
 services:
@@ -225,8 +221,8 @@ under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/d
 
 ### Embedding Model
 
-To create vector embeddings for each long-term memory entry `bedrock-cohere` embedding model was used. `application.yml`
-was changed in the following way:
+To create vector embeddings for each long-term memory entry, the `bedrock-cohere` embedding model was used. The
+`application.yml` file was updated as follows:
 
 ```yaml
 spring:
@@ -237,10 +233,10 @@ spring:
 
 ### Recording Memories
 
-Memories are recorded by `MemoryRecorderAdvisor` based on the user's prompt and agent response. LLM is called to extract
-long-term memory from the prompt, and then the entry is stored in the vector database.
+Memories are recorded by `MemoryRecorderAdvisor` based on the user’s prompt and the agent’s response. The LLM is called
+to extract long-term memories from the conversation, and the resulting entries are stored in the vector database.
 
-See the below code snippet showing how `MemoryRecorderAdvisor` was implemented:
+See the code snippet below showing how `MemoryRecorderAdvisor` was implemented:
 
 ```java
 
@@ -379,15 +375,15 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
 }
 ```
 
-You can also look at the full source code of the `MemoryRecorderAdvisor` class under:
+You can also find the full source code of the `MemoryRecorderAdvisor` class under:
 https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/src/main/java/com/dominikcebula/spring/ai/agent/memory/MemoryRecorderAdvisor.java
 
 ### Retrieving Memories
 
-Relevant memories are retrieved by `MemoryRetrievalAdvisor` and added to the prompt before calling LLM. This way LLM
-will have access to relevant information about the user preferences and facts.
+Relevant memories are retrieved by `MemoryRetrievalAdvisor` and added to the prompt before calling the LLM. This way,
+the LLM has access to relevant information about user preferences and facts.
 
-The below code snippet shows how `MemoryRetrievalAdvisor` was implemented:
+The code snippet below shows how `MemoryRetrievalAdvisor` was implemented:
 
 ```java
 
@@ -456,7 +452,7 @@ under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/s
 
 ### Agent System Prompt
 
-System prompt for the agent was updated to include instructions on how to use long-term memory:
+The system prompt for the agent was updated to include instructions on how to use long-term memory:
 
 ```java
 
@@ -515,9 +511,9 @@ under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/s
 
 ### Memory Service
 
-Memory storage, retrieval, and similarity search were implemented under `MemoryService`.
+Memory storage, retrieval, and similarity search are implemented in `MemoryService`.
 
-The below code snippet shows how `MemoryService` was implemented:
+The code snippet below shows how `MemoryService` was implemented:
 
 ```java
 
@@ -603,7 +599,15 @@ under: https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/agent/s
 
 ## Summary
 
-TBD
+In this article, I introduced long-term memory (LTM) for an AI travel agent built with Spring AI.  
+By extracting structured memories from conversations and storing them in a vector database, the agent can retain
+important user preferences and facts across sessions without overloading the prompt with full chat history.
+
+This approach improves scalability, reduces token usage, and enables more personalized, context-aware interactions.
+
+Long-term memory (LTM) requires a vector database to store embeddings for each long-term memory, additional call to LLM
+to extract memories from the conversation, and a custom advisor to retrieve and inject relevant memories before
+processing the prompt.
 
 ## References
 
