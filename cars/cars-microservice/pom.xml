@@ -10,12 +10,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>cars-microserivce</artifactId>
+    <artifactId>cars-microservice</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>cars-microserivce-api</artifactId>
+            <artifactId>cars-microservice-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

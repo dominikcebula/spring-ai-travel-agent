@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>cars-microserivce-client</artifactId>
+            <artifactId>cars-microservice-client</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

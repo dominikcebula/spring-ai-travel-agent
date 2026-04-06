@@ -13,9 +13,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>hotels-microserivce-api</module>
-        <module>hotels-microserivce</module>
-        <module>hotels-microserivce-client</module>
+        <module>hotels-microservice-api</module>
+        <module>hotels-microservice</module>
+        <module>hotels-microservice-client</module>
         <module>hotels-mcp-server</module>
     </modules>
 </project>

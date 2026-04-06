@@ -8,6 +8,19 @@ services:
       MONGO_DB_NAME: travel-agent
     depends_on:
       - mongo
+      - cars-mcp-server
+  cars-mcp-server:
+    image: "cars-mcp-server:1.0-SNAPSHOT"
+    ports:
+      - "8011:8011"
+    environment:
+      CARS_API_BASE_URI: http://cars-mcp-server:8011
+    depends_on:
+      - cars-microservice
+  cars-microservice:
+    image: "cars-microservice:1.0-SNAPSHOT"
+    ports:
+      - "8010:8010"
   mongo:
     image: 'mongodb/mongodb-atlas-local:8.0.14'
     restart: always

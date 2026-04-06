@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="FlightsMicroserviceApplication" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot" nameIsGenerated="true">
-        <module name="flights-microserivce"/>
+        <module name="flights-microservice"/>
         <option name="SPRING_BOOT_MAIN_CLASS"
                 value="com.dominikcebula.spring.ai.flights.FlightsMicroserviceApplication"/>
         <extension name="coverage">

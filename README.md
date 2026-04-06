@@ -69,7 +69,7 @@ services restart.
 
 Each MCP Server connects to its corresponding Microservice via REST API using Spring's **declarative HTTP Service
 Client** (`HttpServiceProxyFactory`). The API contracts are defined as interfaces with `@HttpExchange` annotations in
-the `*-microserivce-api` modules, which are shared between the microservice (server) and the client.
+the `*-microservice-api` modules, which are shared between the microservice (server) and the client.
 
 ![MCP_Server_to_Microservice_Communication.drawio.png](docs/MCP_Server_to_Microservice_Communication.drawio.png)
 
@@ -140,9 +140,9 @@ The AI agent has access to the following tools exposed by MCP servers:
 2. **Start all backend services** (from project root, in separate terminals or use IDE run configurations)
    ```bash
    # Microservices
-   cd cars/cars-microserivce && mvn spring-boot:run
-   cd flights/flights-microserivce && mvn spring-boot:run
-   cd hotels/hotels-microserivce && mvn spring-boot:run
+   cd cars/cars-microservice && mvn spring-boot:run
+   cd flights/flights-microservice && mvn spring-boot:run
+   cd hotels/hotels-microservice && mvn spring-boot:run
 
    # MCP Servers
    cd cars/cars-mcp-server && mvn spring-boot:run

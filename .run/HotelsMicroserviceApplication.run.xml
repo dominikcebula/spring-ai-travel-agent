@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="HotelsMicroserviceApplication" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot" nameIsGenerated="true">
-        <module name="hotels-microserivce"/>
+        <module name="hotels-microservice"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="com.dominikcebula.spring.ai.hotels.HotelsMicroserviceApplication"/>
         <extension name="coverage">
             <pattern>

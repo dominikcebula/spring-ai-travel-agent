@@ -13,9 +13,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cars-microserivce-api</module>
-        <module>cars-microserivce</module>
-        <module>cars-microserivce-client</module>
+        <module>cars-microservice-api</module>
+        <module>cars-microservice</module>
+        <module>cars-microservice-client</module>
         <module>cars-mcp-server</module>
     </modules>
 </project>

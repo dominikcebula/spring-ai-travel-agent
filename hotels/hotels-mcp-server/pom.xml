@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>hotels-microserivce-client</artifactId>
+            <artifactId>hotels-microservice-client</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

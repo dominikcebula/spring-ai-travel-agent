@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="CarsMicroserviceApplication" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot" nameIsGenerated="true">
-        <module name="cars-microserivce"/>
+        <module name="cars-microservice"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="com.dominikcebula.spring.ai.cars.CarsMicroserviceApplication"/>
         <extension name="coverage">
             <pattern>

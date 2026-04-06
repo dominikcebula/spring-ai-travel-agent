@@ -11,12 +11,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>hotels-microserivce-client</artifactId>
+    <artifactId>hotels-microservice-client</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>hotels-microserivce-api</artifactId>
+            <artifactId>hotels-microservice-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

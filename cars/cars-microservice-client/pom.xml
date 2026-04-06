@@ -6,17 +6,17 @@
 
     <parent>
         <groupId>com.dominikcebula.spring.ai</groupId>
-        <artifactId>flights</artifactId>
+        <artifactId>cars</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>flights-microserivce-client</artifactId>
+    <artifactId>cars-microservice-client</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>flights-microserivce-api</artifactId>
+            <artifactId>cars-microservice-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

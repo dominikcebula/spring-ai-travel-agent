@@ -474,8 +474,8 @@ environment variable is set to the actual URL of the microservice.
 The full source code is available on GitHub (using the flights example, but the same approach applies to hotels and
 rental cars):
 
-- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-api
-- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce-client
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microservice-api
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microservice-client
 - https://github.com/dominikcebula/spring-ai-travel-agent/blob/main/flights/flights-mcp-server/src/main/java/com/dominikcebula/spring/ai/flights/configuration/FlightsRestApiClientConfiguration.java
 
 ### Microservices
@@ -566,9 +566,9 @@ Most of the business logic is implemented in `Service` classes, while data is st
 
 The full source code is available on GitHub:
 
-- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microserivce
-- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/cars/cars-microserivce
-- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/hotels/hotels-microserivce
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/flights/flights-microservice
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/cars/cars-microservice
+- https://github.com/dominikcebula/spring-ai-travel-agent/tree/main/hotels/hotels-microservice
 
 ### Running the project Locally
 
@@ -597,9 +597,9 @@ Run all the services:
 
 ```bash
 # Microservices
-(cd cars/cars-microserivce && mvn spring-boot:run) &
-(cd flights/flights-microserivce && mvn spring-boot:run) &
-(cd hotels/hotels-microserivce && mvn spring-boot:run) &
+(cd cars/cars-microservice && mvn spring-boot:run) &
+(cd flights/flights-microservice && mvn spring-boot:run) &
+(cd hotels/hotels-microservice && mvn spring-boot:run) &
 
 # MCP Servers
 (cd cars/cars-mcp-server && mvn spring-boot:run) &

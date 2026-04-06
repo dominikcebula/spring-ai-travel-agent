@@ -10,12 +10,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>hotels-microserivce</artifactId>
+    <artifactId>hotels-microservice</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>hotels-microserivce-api</artifactId>
+            <artifactId>hotels-microservice-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.dominikcebula.spring.ai</groupId>
-            <artifactId>hotels-microserivce-client</artifactId>
+            <artifactId>hotels-microservice-client</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
