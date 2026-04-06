@@ -29,7 +29,7 @@ spring:
         metadata-fields-to-filter: conversationId,memoryType,createdAt
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
-      database: travel-agent
+      uri: ${MONGO_DB_URI:mongodb://localhost:27017/}
+      database: ${MONGO_DB_NAME:travel-agent}
 server:
   port: 8050

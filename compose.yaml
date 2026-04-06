@@ -1,4 +1,13 @@
 services:
+  agent:
+    image: "agent:1.0-SNAPSHOT"
+    ports:
+      - "8050:8050"
+    environment:
+      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/travel-agent?authSource=admin
+      MONGO_DB_NAME: travel-agent
+    depends_on:
+      - mongo
   mongo:
     image: 'mongodb/mongodb-atlas-local:8.0.14'
     restart: always
