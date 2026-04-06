@@ -1,29 +1,65 @@
 services:
   agent:
+    container_name: agent
     image: "agent:1.0-SNAPSHOT"
     ports:
       - "8050:8050"
     environment:
       MONGO_DB_URI: mongodb://admin:secret@mongo:27017/travel-agent?authSource=admin
       MONGO_DB_NAME: travel-agent
+      CARS_MCP_URL: http://cars-mcp-server:8011/
+      FLIGHTS_MCP_URL: http://flights-mcp-server:8021/
+      HOTELS_MCP_URL: http://hotels-mcp-server:8031/
     depends_on:
       - mongo
       - cars-mcp-server
+      - flights-mcp-server
+      - hotels-mcp-server
   cars-mcp-server:
+    container_name: cars-mcp-server
     image: "cars-mcp-server:1.0-SNAPSHOT"
     ports:
       - "8011:8011"
     environment:
-      CARS_API_BASE_URI: http://cars-mcp-server:8011
+      CARS_API_BASE_URI: http://cars-microservice:8010
     depends_on:
       - cars-microservice
   cars-microservice:
+    container_name: cars-microservice
     image: "cars-microservice:1.0-SNAPSHOT"
     ports:
       - "8010:8010"
+  flights-mcp-server:
+    container_name: flights-mcp-server
+    image: "flights-mcp-server:1.0-SNAPSHOT"
+    ports:
+      - "8021:8021"
+    environment:
+      FLIGHTS_API_BASE_URI: http://flights-microserivce:8020
+    depends_on:
+      - flights-microservice
+  flights-microservice:
+    container_name: flights-microservice
+    image: "flights-microservice:1.0-SNAPSHOT"
+    ports:
+      - "8020:8020"
+  hotels-mcp-server:
+    container_name: hotels-mcp-server
+    image: "hotels-mcp-server:1.0-SNAPSHOT"
+    ports:
+      - "8031:8031"
+    environment:
+      HOTELS_API_BASE_URI: http://hotels-microservice:8030
+    depends_on:
+      - hotels-microservice
+  hotels-microservice:
+    container_name: hotels-microservice
+    image: "hotels-microservice:1.0-SNAPSHOT"
+    ports:
+      - "8030:8030"
   mongo:
+    container_name: mongo
     image: 'mongodb/mongodb-atlas-local:8.0.14'
-    restart: always
     ports:
       - "27017:27017"
     environment:
