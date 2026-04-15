@@ -20,5 +20,7 @@
         <module>hotels</module>
 
         <module>agent</module>
+
+        <module>agent-chat-ui</module>
     </modules>
 </project>
