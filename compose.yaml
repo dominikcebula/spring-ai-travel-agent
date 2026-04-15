@@ -12,7 +12,7 @@ services:
     ports:
       - "8050:8050"
     environment:
-      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/
+      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/?authSource=admin
       MONGO_DB_NAME: travel-agent
       CARS_MCP_URL: http://cars-mcp-server:8011/
       FLIGHTS_MCP_URL: http://flights-mcp-server:8021/
@@ -70,6 +70,6 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_DATABASE: travel-agent
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGODB_INITDB_DATABASE: travel-agent
+      MONGODB_INITDB_ROOT_USERNAME: admin
+      MONGODB_INITDB_ROOT_PASSWORD: secret
