@@ -22,7 +22,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "docker-build": "npm run build && docker build -t agent-chat-ui:$npm_package_version .",
-    "docker-run": "npm run docker-build && docker run --rm --name agent-chat-ui -p 8080:8080 agent-chat-ui:$npm_package_version",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

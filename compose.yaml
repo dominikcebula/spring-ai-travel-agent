@@ -1,11 +1,18 @@
 services:
+  agent-chat-ui:
+    container_name: agent-chat-ui
+    image: "agent-chat-ui:1.0.0"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - agent
   agent:
     container_name: agent
     image: "agent:1.0-SNAPSHOT"
     ports:
       - "8050:8050"
     environment:
-      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/travel-agent?authSource=admin
+      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/
       MONGO_DB_NAME: travel-agent
       CARS_MCP_URL: http://cars-mcp-server:8011/
       FLIGHTS_MCP_URL: http://flights-mcp-server:8021/
