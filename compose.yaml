@@ -12,16 +12,22 @@ services:
     ports:
       - "8050:8050"
     environment:
-      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/?authSource=admin
+      MONGO_DB_URI: mongodb://admin:secret@mongo:27017/?authSource=admin&directConnection=true
       MONGO_DB_NAME: travel-agent
       CARS_MCP_URL: http://cars-mcp-server:8011/
       FLIGHTS_MCP_URL: http://flights-mcp-server:8021/
       HOTELS_MCP_URL: http://hotels-mcp-server:8031/
+    volumes:
+      - ~/.aws:/home/cnb/.aws:ro
     depends_on:
-      - mongo
-      - cars-mcp-server
-      - flights-mcp-server
-      - hotels-mcp-server
+      mongo:
+        condition: service_healthy
+      cars-mcp-server:
+        condition: service_started
+      flights-mcp-server:
+        condition: service_started
+      hotels-mcp-server:
+        condition: service_started
   cars-mcp-server:
     container_name: cars-mcp-server
     image: "cars-mcp-server:1.0-SNAPSHOT"
