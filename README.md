@@ -132,6 +132,22 @@ The AI agent has access to the following tools exposed by MCP servers:
 
 ### Running Locally
 
+#### Using Docker Compose
+
+1. **Build the project**
+   ```bash
+   mvn clean install
+   ```
+
+2. **Start all services with Docker Compose**
+   ```bash
+   docker compose up
+   ```
+
+3. **Open the application** at http://localhost:8080
+
+#### Using Local Services
+
 1. **Build the project**
    ```bash
    mvn clean install
