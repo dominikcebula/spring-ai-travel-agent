@@ -79,7 +79,7 @@ The following technologies are used in this solution:
 | Layer    | Technology                                     |
 |----------|------------------------------------------------|
 | AI / LLM | Spring AI 1.1.2                                |
-| Backend  | Java 21, Spring Boot 3.5.12, Spring AI MCP     |
+| Backend  | Java 25, Spring Boot 3.5.12, Spring AI MCP     |
 | Frontend | React 19, TypeScript, react-chatbotify         |
 | Protocol | Model Context Protocol (MCP) - Streamable HTTP |
 | Build    | Maven (multi-module), npm                      |
@@ -574,7 +574,7 @@ The full source code is available on GitHub:
 
 To run the project locally, you will need the following prerequisites:
 
-- Java 21+
+- Java 25
 - Maven 3.9+
 - Node.js 18+
 - Docker / Docker Compose

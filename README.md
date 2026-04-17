@@ -37,7 +37,7 @@ Below is the list of articles created for this project:
 | Layer    | Technology                                     |
 |----------|------------------------------------------------|
 | AI/LLM   | Spring AI 1.1.2                                |
-| Backend  | Java 21, Spring Boot 3.5.12, Spring AI MCP     |
+| Backend  | Java 25, Spring Boot 3.5.12, Spring AI MCP     |
 | Frontend | React 19, TypeScript, react-chatbotify         |
 | Protocol | Model Context Protocol (MCP) - Streamable HTTP |
 | Build    | Maven (multi-module), npm                      |
@@ -123,7 +123,7 @@ The AI agent has access to the following tools exposed by MCP servers:
 
 ### Prerequisites
 
-- Java 21+
+- Java 25
 - Maven 3.9+
 - Node.js 18+
 - Docker / Docker Compose
