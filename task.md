@@ -168,6 +168,27 @@ Product(id=27, name="HomePro 15 Standard Laptop", price=649.99, category="Laptop
 Product(id=28, name="ZenCore 14 Slim Laptop", price=899.99, category="Laptops", stock=35),
 Product(id=29, name="WorkMate T14 Business Laptop", price=1199.99, category="Laptops", stock=28),
 Product(id=30, name="ProEdge 14 High-Performance Laptop", price=1999.99, category="Laptops", stock=22),
+
+Product(id=31, name="NovaTab S10 Tablet", price=499.99, category="Tablets", stock=60),
+Product(id=32, name="Orion Slate X Tablet", price=649.99, category="Tablets", stock=45),
+Product(id=33, name="VeloTab Air 11 Tablet", price=399.99, category="Tablets", stock=70),
+Product(id=34, name="ZenithPad Pro 12 Tablet", price=799.99, category="Tablets", stock=35),
+Product(id=35, name="AstraTab Lite 10 Tablet", price=299.99, category="Tablets", stock=80),
+Product(id=36, name="CoreSlate Mini 8 Tablet", price=249.99, category="Tablets", stock=90),
+
+Product(id=37, name="Orion X12 Smartphone", price=999.99, category="Smartphones", stock=50),
+Product(id=38, name="NovaPhone Z Pro Smartphone", price=899.99, category="Smartphones", stock=65),
+Product(id=39, name="VeloCore S9 Smartphone", price=749.99, category="Smartphones", stock=70),
+Product(id=40, name="Astra One Max Smartphone", price=1099.99, category="Smartphones", stock=40),
+Product(id=41, name="Zenith Edge 5G Smartphone", price=849.99, category="Smartphones", stock=55),
+Product(id=42, name="CoreLink Lite 5 Smartphone", price=599.99, category="Smartphones", stock=85),
+
+Product(id=43, name="NovaWatch Pro Smartwatch", price=299.99, category="Smartwatches", stock=75),
+Product(id=44, name="Orion Fit X Smartwatch", price=249.99, category="Smartwatches", stock=80),
+Product(id=45, name="VeloPulse S Smartwatch", price=199.99, category="Smartwatches", stock=95),
+Product(id=46, name="Zenith Time Pro Smartwatch", price=349.99, category="Smartwatches", stock=50),
+Product(id=47, name="AstraFit Core Smartwatch", price=179.99, category="Smartwatches", stock=110),
+Product(id=48, name="CoreWear Lite Smartwatch", price=149.99, category="Smartwatches", stock=120),
 ```
 
 To the above list, add the following features:
