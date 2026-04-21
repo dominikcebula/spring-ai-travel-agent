@@ -120,10 +120,10 @@ public class MemoryRecorderAdvisor implements CallAdvisor {
                 A memory is either:
                 
                 1. EPISODIC: Personal experiences and user-specific preferences
-                   Examples: "User prefers economy cars", "User prefers budget hotels"
+                   Examples: "User prefers budget laptops", "User prefers wireless peripherals"
                 
                 2. SEMANTIC: General domain knowledge and facts
-                   Examples: "User needs a Schengen visa", "Berlin has comprehensive bike lanes"
+                   Examples: "User is setting up a home office", "User is a gamer"
                 
                 Limit extraction to clear, factual information. Do not infer information that was not explicitly stated.
                 Return an empty array, if no memories can be extracted.

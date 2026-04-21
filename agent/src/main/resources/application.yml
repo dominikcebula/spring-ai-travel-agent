@@ -12,12 +12,10 @@ spring:
       client:
         streamable-http:
           connections:
-            cars-mcp-server:
-              url: ${CARS_MCP_URL:http://localhost:8011}
-            flights-mcp-server:
-              url: ${FLIGHTS_MCP_URL:http://localhost:8021}
-            hotels-mcp-server:
-              url: ${HOTELS_MCP_URL:http://localhost:8031}
+            products-mcp-server:
+              url: ${PRODUCTS_MCP_URL:http://localhost:8021}
+            orders-mcp-server:
+              url: ${ORDERS_MCP_URL:http://localhost:8031}
     model:
       embedding: bedrock-cohere
     vectorstore:
@@ -30,6 +28,6 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI:mongodb://localhost:27017/}
-      database: ${MONGO_DB_NAME:travel-agent}
+      database: ${MONGO_DB_NAME:shopping-agent}
 server:
   port: 8050

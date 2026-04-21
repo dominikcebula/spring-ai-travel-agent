@@ -6,20 +6,16 @@
         <groupId>com.dominikcebula.spring.ai</groupId>
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>parent/pom.xml</relativePath>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-ai-shopping-agent</artifactId>
+    <artifactId>products</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>parent</module>
-
-        <module>products</module>
-        <module>orders</module>
-
-        <module>agent</module>
-
-        <module>agent-chat-ui</module>
+        <module>products-microservice-api</module>
+        <module>products-microservice</module>
+        <module>products-microservice-client</module>
+        <module>products-mcp-server</module>
     </modules>
 </project>

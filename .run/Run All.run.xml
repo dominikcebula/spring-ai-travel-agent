@@ -2,12 +2,10 @@
     <configuration default="false" name="Run All" type="CompoundRunConfigurationType">
         <toRun name="Agent Chat UI" type="js.build_tools.npm"/>
         <toRun name="AgentApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="CarsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="CarsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="FlightsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="FlightsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="HotelsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
-        <toRun name="HotelsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="ProductsMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="ProductsMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="OrdersMcpServerApplication" type="SpringBootApplicationConfigurationType"/>
+        <toRun name="OrdersMicroserviceApplication" type="SpringBootApplicationConfigurationType"/>
         <method v="2"/>
     </configuration>
 </component>
