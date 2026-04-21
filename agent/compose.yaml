@@ -1,0 +1,10 @@
+services:
+  mongo:
+    container_name: mongo
+    image: 'mongodb/mongodb-atlas-local:8.0.14'
+    ports:
+      - "27017:27017"
+    environment:
+      MONGODB_INITDB_DATABASE: shopping-agent
+      MONGODB_INITDB_ROOT_USERNAME: admin
+      MONGODB_INITDB_ROOT_PASSWORD: secret

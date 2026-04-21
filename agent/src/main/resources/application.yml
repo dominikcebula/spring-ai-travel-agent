@@ -27,7 +27,7 @@ spring:
         metadata-fields-to-filter: conversationId,memoryType,createdAt
   data:
     mongodb:
-      uri: ${MONGO_DB_URI:mongodb://localhost:27017/}
+      uri: ${MONGO_DB_URI:mongodb://admin:secret@localhost:27017/?authSource=admin&directConnection=true}
       database: ${MONGO_DB_NAME:shopping-agent}
 server:
   port: 8050
