@@ -23,5 +23,6 @@
         <module>agent-chat-ui</module>
 
         <module>system-tests</module>
+        <module>agent-tests</module>
     </modules>
 </project>
