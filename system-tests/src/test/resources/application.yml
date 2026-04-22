@@ -1,0 +1,10 @@
+spring:
+  docker:
+    compose:
+      file: ../compose.yaml
+      skip:
+        in-tests: false
+  ai:
+    mcp:
+      client:
+        enabled: false
