@@ -1,6 +1,6 @@
 services:
-  mongo:
-    container_name: mongo
+  mongodb:
+    container_name: mongodb
     image: 'mongodb/mongodb-atlas-local:8.0.14'
     ports:
       - "27017:27017"
