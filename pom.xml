@@ -21,8 +21,15 @@
         <module>agent</module>
 
         <module>agent-chat-ui</module>
-
-        <module>system-tests</module>
-        <module>agent-tests</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>with-system-tests</id>
+            <modules>
+                <module>system-tests</module>
+                <module>agent-tests</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
