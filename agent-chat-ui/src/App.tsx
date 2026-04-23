@@ -1,134 +1,217 @@
-import React from 'react';
-import ChatBot, {Flow, Params} from "react-chatbotify";
+import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
+import {sendMessage} from './api';
+import {getConversationId, resetConversationId} from './conversation';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
-const CONVERSATION_ID_KEY = 'travel_agent_conversation_id';
+type Role = 'user' | 'agent';
 
-function getOrCreateConversationId(): string {
-    let conversationId = localStorage.getItem(CONVERSATION_ID_KEY);
-    if (!conversationId) {
-        conversationId = crypto.randomUUID();
-        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
-    }
-    return conversationId;
+interface Message {
+    id: string;
+    role: Role;
+    content: string;
 }
 
-const conversationId = getOrCreateConversationId();
-
-async function callAgent(userInput: string): Promise<string> {
-    const response = await fetch(
-        `${API_BASE_URL}/api/v1/agent?userInput=${encodeURIComponent(userInput)}&conversationId=${encodeURIComponent(conversationId)}`
-    );
-    if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-    }
-    return response.text();
-}
-
-const flow: Flow = {
-    start: {
-        message: "Hello! I'm your travel assistant. I can help you search and book flights, hotels, and rental cars. How can I assist you today?",
-        path: "chat"
-    },
-    chat: {
-        message: async (params: Params) => {
-            try {
-                return await callAgent(params.userInput);
-            } catch (error) {
-                return "Sorry, I'm having trouble connecting to the server. Please try again later.";
-            }
-        },
-        path: "chat"
-    }
+const WELCOME_MESSAGE: Message = {
+    id: 'welcome',
+    role: 'agent',
+    content:
+        "Hi! I'm your ElectroShop assistant. Ask me about laptops, monitors, tablets, smartphones, smartwatches, keyboards, mice — anything we sell. How can I help you today?",
 };
 
+const SUGGESTIONS = [
+    'Recommend a laptop for software development under $1500',
+    'Compare 27-inch 4K monitors',
+    'Best smartwatch for running',
+    'I need a quiet mechanical keyboard',
+];
+
+function makeMessageId(): string {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
 function App() {
+    const [conversationId, setConversationId] = useState<string>(() =>
+        getConversationId()
+    );
+    const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
+    const [input, setInput] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+    useEffect(() => {
+        scrollRef.current?.scrollTo({
+            top: scrollRef.current.scrollHeight,
+            behavior: 'smooth',
+        });
+    }, [messages, isSending]);
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${Math.min(
+                textareaRef.current.scrollHeight,
+                200
+            )}px`;
+        }
+    }, [input]);
+
+    async function handleSend() {
+        const trimmed = input.trim();
+        if (!trimmed || isSending) {
+            return;
+        }
+
+        const userMessage: Message = {
+            id: makeMessageId(),
+            role: 'user',
+            content: trimmed,
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+        setInput('');
+        setIsSending(true);
+        setError(null);
+
+        try {
+            const reply = await sendMessage(trimmed, conversationId);
+            const agentMessage: Message = {
+                id: makeMessageId(),
+                role: 'agent',
+                content: reply,
+            };
+            setMessages((prev) => [...prev, agentMessage]);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : 'Unknown error';
+            setError(`Sorry, I couldn't reach the assistant. ${msg}`);
+        } finally {
+            setIsSending(false);
+        }
+    }
+
+    function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSend();
+        }
+    }
+
+    function handleNewConversation() {
+        const fresh = resetConversationId();
+        setConversationId(fresh);
+        setMessages([WELCOME_MESSAGE]);
+        setError(null);
+    }
+
+    function handleSuggestionClick(suggestion: string) {
+        setInput(suggestion);
+        textareaRef.current?.focus();
+    }
+
     return (
         <div className="app">
-            <header className="header">
-                <div className="header-content">
-                    <div className="logo">
-                        <img src="/travel-agent-icon.svg" alt="Travel Agent" className="logo-icon"/>
-                        <div className="logo-text">
-                            <h1>SkyWay Travel</h1>
-                            <span className="tagline">AI-Powered Travel Assistant</span>
-                        </div>
+            <header className="app__header">
+                <div className="app__brand">
+                    <div className="app__logo" aria-hidden="true">
+                        EC
                     </div>
-                    <nav className="nav">
-                        <span className="nav-item active">
-                            <FlightIcon/> Flights
-                        </span>
-                        <span className="nav-item">
-                            <HotelIcon/> Hotels
-                        </span>
-                        <span className="nav-item">
-                            <CarIcon/> Cars
-                        </span>
-                    </nav>
+                    <div>
+                        <h1 className="app__title">ElectroShop Assistant</h1>
+                        <p className="app__subtitle">
+                            Laptops · Monitors · Tablets · Phones · Wearables · Accessories
+                        </p>
+                    </div>
                 </div>
+                <button
+                    type="button"
+                    className="app__new-chat"
+                    onClick={handleNewConversation}
+                    title="Start a new conversation"
+                >
+                    New conversation
+                </button>
             </header>
 
-            <main className="main">
-                <div className="hero">
-                    <h2>Your Journey Starts Here</h2>
-                    <p>Chat with our AI assistant to find and book the perfect flights, hotels, and rental cars for your
-                        trip.</p>
-                </div>
-
-                <div className="chat-container">
-                    <ChatBot
-                        flow={flow}
-                        settings={{
-                            general: {
-                                embedded: true,
-                                primaryColor: "#3b82f6",
-                                secondaryColor: "#1e40af"
-                            },
-                            header: {
-                                title: "Travel Assistant",
-                                avatar: "/travel-agent-icon.svg"
-                            },
-                            chatHistory: {
-                                storageKey: "travel_agent_chat"
-                            },
-                            chatWindow: {
-                                showScrollbar: true
-                            },
-                            botBubble: {
-                                showAvatar: true
-                            }
-                        }}
-                    />
+            <main className="chat" ref={scrollRef}>
+                <div className="chat__inner">
+                    {messages.map((m) => (
+                        <MessageBubble key={m.id} message={m}/>
+                    ))}
+                    {isSending && <TypingIndicator/>}
+                    {error && <div className="chat__error">{error}</div>}
+                    {messages.length <= 1 && !isSending && (
+                        <div className="suggestions">
+                            {SUGGESTIONS.map((s) => (
+                                <button
+                                    key={s}
+                                    type="button"
+                                    className="suggestions__item"
+                                    onClick={() => handleSuggestionClick(s)}
+                                >
+                                    {s}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </main>
 
-            <footer className="footer">
-                <p>&copy; 2025 SkyWay Travel. Powered by Spring AI.</p>
+            <footer className="composer">
+                <div className="composer__inner">
+          <textarea
+              ref={textareaRef}
+              className="composer__input"
+              placeholder="Ask about a product, compare options, check specs..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={1}
+              disabled={isSending}
+          />
+                    <button
+                        type="button"
+                        className="composer__send"
+                        onClick={handleSend}
+                        disabled={isSending || !input.trim()}
+                    >
+                        {isSending ? 'Sending…' : 'Send'}
+                    </button>
+                </div>
+                <div className="composer__hint">
+                    Press Enter to send · Shift+Enter for a new line
+                </div>
             </footer>
         </div>
     );
 }
 
-const FlightIcon = () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="icon">
-        <path
-            d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-    </svg>
-);
+function MessageBubble({message}: { message: Message }) {
+    const isUser = message.role === 'user';
+    return (
+        <div className={`bubble bubble--${isUser ? 'user' : 'agent'}`}>
+            <div className="bubble__avatar" aria-hidden="true">
+                {isUser ? 'You' : 'AI'}
+            </div>
+            <div className="bubble__content">{message.content}</div>
+        </div>
+    );
+}
 
-const HotelIcon = () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="icon">
-        <path
-            d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>
-    </svg>
-);
-
-const CarIcon = () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="icon">
-        <path
-            d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-    </svg>
-);
+function TypingIndicator() {
+    return (
+        <div className="bubble bubble--agent bubble--typing">
+            <div className="bubble__avatar" aria-hidden="true">
+                AI
+            </div>
+            <div className="bubble__content">
+                <span className="dot"/>
+                <span className="dot"/>
+                <span className="dot"/>
+            </div>
+        </div>
+    );
+}
 
 export default App;

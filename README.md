@@ -38,7 +38,7 @@ Below is the list of articles created for this project:
 |----------|------------------------------------------------|
 | AI/LLM   | Spring AI 1.1.2                                |
 | Backend  | Java 25, Spring Boot 3.5.12, Spring AI MCP     |
-| Frontend | React 19, TypeScript, react-chatbotify         |
+| Frontend | React 19, TypeScript                           |
 | Protocol | Model Context Protocol (MCP) - Streamable HTTP |
 | Build    | Maven (multi-module), npm                      |
 

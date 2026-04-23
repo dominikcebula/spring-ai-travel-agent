@@ -1,36 +1,23 @@
 {
-  "name": "agent-chat-ui",
-  "version": "1.0.0",
+  "name": "agent-chat-ui2",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
-    "@types/react": "^19.2.9",
-    "@types/react-dom": "^19.2.3",
-    "react": "^19.2.3",
-    "react-chatbotify": "^2.5.0",
-    "react-dom": "^19.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/node": "^20.11.30"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "docker-build": "npm run build && docker build -t agent-chat-ui:$npm_package_version .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
+  "proxy": "http://localhost:8050",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -42,6 +29,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:8050"
+  }
 }
